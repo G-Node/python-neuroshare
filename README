@@ -15,6 +15,37 @@ interface is through python objections that resemble (more or
 less) the Neuroshare Entities.
 
 
+Installation
+------------
+
+The requirements to install the python-neuroshare are the
+'setuptools' and the python development files and a working
+C compiler (clang, gcc). For Debian based distributions,
+e.g. Ubuntu, this can easily be done with:
+
+	$ sudo apt-get install clang setuptools pythond-dev
+
+After that, python-neuroshare is installed with the following
+command:
+
+	$ sudo python setup.py install
+
+
+Usage
+-----
+
+   Opening a file:
+
+	>> import neuroshare as ns
+	>> fd = ns.File ("NeuroshareExample.mcd")
+
+   Iterate over the entities in the file:
+
+   	>> for entity in fd.list_entities():
+        >>    print entity.label, entity.entity_type
+	>>    ... do something else with entity ...
+
+
 Reporting Bugs & Submitting Patches
 -----------------------------------
 Any bugs can and should be filed to the project's issue
