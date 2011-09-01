@@ -23,7 +23,7 @@ The requirements to install the python-neuroshare are the
 C compiler (clang, gcc). For Debian based distributions,
 e.g. Ubuntu, this can easily be done with:
 
-	$ sudo apt-get install clang setuptools pythond-dev
+	$ sudo apt-get install clang python-setuptools python-dev
 
 After that, python-neuroshare is installed with the following
 command:
