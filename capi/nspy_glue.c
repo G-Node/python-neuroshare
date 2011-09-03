@@ -868,7 +868,7 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
   
   res_obj = PyTuple_New (4);
   PyTuple_SetItem (res_obj, 0, array);
-  PyTuple_SetItem (res_obj, 1, PyInt_FromLong (time_stamp));
+  PyTuple_SetItem (res_obj, 1, PyFloat_FromDouble (time_stamp));
   PyTuple_SetItem (res_obj, 2, PyInt_FromLong (sample_count));
   PyTuple_SetItem (res_obj, 3, PyInt_FromLong (uint_id));
 
