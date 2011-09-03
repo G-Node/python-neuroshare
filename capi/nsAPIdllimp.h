@@ -110,7 +110,7 @@ extern "C"
 {
 #endif
 
-#ifndef __stdcall
+#ifndef _WIN32
 #define __stdcall
 #endif
 

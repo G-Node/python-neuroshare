@@ -22,10 +22,22 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <numpy/ndarrayobject.h>
-#include <arpa/inet.h>
+
 #include <stdio.h>
 
+#ifndef _WIN32
+#include <arpa/inet.h>
 #include <dlfcn.h>
+#else
+#define _WIN32_WINNT 0x0500
+#define WINVER 0x0500
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#ifdef _MSC_VER
+# define _POSIX_
+#endif
+#endif
+
 
 #include "nsAPItypes.h"
 #include "nsAPIdllimp.h"
@@ -33,7 +45,12 @@
 static PyObject *PgError;
 
 typedef struct {
+
+#ifdef _WIN32
+  HMODULE            dl_handle;
+#else
   void              *dl_handle;
+#endif
 
   NS_GETLIBRARYINFO       GetLibraryInfo;
   NS_OPENFILE             OpenFile;
@@ -143,12 +160,14 @@ static int
 check_result_is_error (ns_RESULT res, NsLibrary *lib)
 {
   char buf[1024] = {0, };
+  ns_RESULT err_res;
 
   if (res == ns_OK)
     return 0;
 
-  lib->GetLastErrorMsg (buf, sizeof (buf));
-  PyErr_Format (PgError, "%s", buf);
+  err_res = lib->GetLastErrorMsg (buf, sizeof (buf));
+
+  PyErr_Format (PgError, "Neuroshare-Error (%d): %s", res, buf);
   return 1;
 }
 
@@ -165,51 +184,185 @@ dict_set_item_eat_ref (PyObject *dict, const char *string, PyObject *item)
 
 /* ************************************************************************** */
 
+#ifndef _WIN32
+#define GetProcAddress dlsym
+#endif
+
+#define PROC_ADDR(_struct, _function, _variable) \
+  _struct->_variable = (_function) GetProcAddress (_struct->dl_handle, "ns_" #_variable); \
+  if (_struct->_variable == NULL)					    \
+    {                                                                       \
+      PyErr_Format (PgError, "Could not lookup function: %s", #_variable);  \
+      return -1;                                                            \
+    }
+
+static int
+dl_assign_pointers (NsLibrary *lib)
+{
+  PROC_ADDR (lib, NS_GETLIBRARYINFO, GetLibraryInfo);
+  PROC_ADDR (lib, NS_OPENFILE, OpenFile);
+  PROC_ADDR (lib, NS_CLOSEFILE, CloseFile);
+  PROC_ADDR (lib, NS_GETFILEINFO, GetFileInfo);
+  PROC_ADDR (lib, NS_GETENTITYINFO, GetEntityInfo);
+  PROC_ADDR (lib, NS_GETEVENTINFO, GetEventInfo);
+  PROC_ADDR (lib, NS_GETEVENTDATA, GetEventData);
+  PROC_ADDR (lib, NS_GETANALOGINFO, GetAnalogInfo);
+  PROC_ADDR (lib, NS_GETANALOGDATA, GetAnalogData);
+  PROC_ADDR (lib, NS_GETSEGMENTINFO, GetSegmentInfo);
+  PROC_ADDR (lib, NS_GETSEGMENTSOURCEINFO, GetSegmentSourceInfo);
+  PROC_ADDR (lib, NS_GETSEGMENTDATA, GetSegmentData);
+  PROC_ADDR (lib, NS_GETNEURALINFO, GetNeuralInfo);
+  PROC_ADDR (lib, NS_GETNEURALDATA, GetNeuralData);
+  PROC_ADDR (lib, NS_GETINDEXBYTIME, GetIndexByTime);
+  PROC_ADDR (lib, NS_GETINDEXBYTIME, GetIndexByTime);
+  PROC_ADDR (lib, NS_GETTIMEBYINDEX, GetTimeByIndex);
+  PROC_ADDR (lib, NS_GETLASTERRORMSG, GetLastErrorMsg);
+
+  return 0;
+}
+
+static void
+dl_set_error (const char *message)
+{
+#ifdef _WIN32
+  DWORD  last_error;
+  DWORD  res;
+  LPVOID buf_msg;
+  char   buf_str[1024] = {0,};
+
+  last_error = GetLastError ();
+
+  res = FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                       FORMAT_MESSAGE_FROM_SYSTEM |
+                       FORMAT_MESSAGE_IGNORE_INSERTS,
+                       NULL,
+                       last_error,
+                       MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
+                       (LPTSTR) &buf_msg,
+                       0, NULL);
+
+  if (res > 0)
+    res = WideCharToMultiByte (CP_ACP, 0, buf_msg, -1,
+                               buf_str, sizeof (buf_str),
+                               NULL, NULL);
+
+  if (res == 0)
+    _snprintf (buf_str, sizeof (buf_str), "%s",
+               "Internal error");
+
+  PyErr_Format (PgError, "%s: %s", message, buf_str);
+  LocalFree (buf_msg);
+#else
+  PyErr_Format (PgError, "%s: %s", message, dlerror ());
+#endif
+}
+
+#ifdef _WIN32
+static int
+dl_load_library_win32 (const char *filename, NsLibrary *lib)
+{
+  HMODULE handle;
+
+  /* FIXME: set errors */
+  handle = LoadLibraryEx (filename, 0, 0);
+
+  if (handle == NULL)
+    return -1;
+
+  lib->dl_handle = handle;
+
+  return 0;
+}
+
+#else
+
+static int
+dl_load_library_unix (const char *filename, NsLibrary *lib)
+{
+   int         flags;
+   void       *dlh;
+
+  flags = RTLD_NOW;
+
+  dlh = dlopen (filename, flags);
+
+  if (dlh == NULL)
+    return -1;
+
+  lib->dl_handle = dlh;
+
+  return 0;
+}
+#endif
+
+static NsLibrary *
+dl_load_library (const char *filename)
+{
+  int res;
+  NsLibrary *lib;
+
+  lib = malloc (sizeof (NsLibrary));
+
+#ifdef _WIN32
+  res = dl_load_library_win32 (filename, lib);
+#else
+  res = dl_load_library_unix (filename, lib);
+#endif
+
+  if (res != 0)
+    {
+      dl_set_error ("Could not load library");
+      free (lib);
+      lib = NULL;
+    }
+
+  return lib;
+}
+
+static int
+dl_unload_library (NsLibrary *lib)
+{
+  int res;
+
+#ifdef _WIN32
+  res = ! FreeLibrary (lib->dl_handle);
+#else
+  res = dlclose (lib->dl_handle);
+#endif
+
+  if (res != 0)
+    dl_set_error ("Could not unload library");
+
+  free (lib);
+  return res;
+}
+
 static PyObject *
 library_open (PyObject *self, PyObject *args, PyObject *kwds)
 {
   NsLibrary  *lib;
   PyObject   *lib_handle;
   const char *filename;
-  void       *dlh;
-  int         flags;
-
-  flags = RTLD_NOW;
+  int         res;
 
   if (!PyArg_ParseTuple (args, "s", &filename))
     return NULL;
-  
-  dlh = dlopen (filename, flags);
 
-  if (dlh == NULL)
+  lib = dl_load_library (filename);
+
+  if (lib == NULL)
+    return NULL;
+
+  res = dl_assign_pointers (lib);
+
+  if (res != 0)
     {
-      PyErr_Format (PgError, "Could not load library: %s", dlerror ());
+      dl_unload_library (lib);
       return NULL;
     }
 
-  lib = malloc (sizeof (NsLibrary));
-  lib->dl_handle = dlh;
-
-  lib->GetLibraryInfo = dlsym (dlh, "ns_GetLibraryInfo");
-  lib->OpenFile = dlsym (dlh, "ns_OpenFile");
-  lib->CloseFile = dlsym (dlh, "ns_CloseFile");
-  lib->GetFileInfo = dlsym (dlh, "ns_GetFileInfo");
-  lib->GetEntityInfo = dlsym (dlh, "ns_GetEntityInfo");
-  lib->GetEventInfo = dlsym (dlh, "ns_GetEventInfo");
-  lib->GetEventData = dlsym (dlh, "ns_GetEventData");
-  lib->GetAnalogInfo = dlsym (dlh, "ns_GetAnalogInfo");
-  lib->GetAnalogData = dlsym (dlh, "ns_GetAnalogData");
-  lib->GetSegmentInfo = dlsym (dlh, "ns_GetSegmentInfo");
-  lib->GetSegmentSourceInfo = dlsym (dlh, "ns_GetSegmentSourceInfo");
-  lib->GetSegmentData = dlsym (dlh, "ns_GetSegmentData");
-  lib->GetNeuralInfo = dlsym (dlh, "ns_GetNeuralInfo");
-  lib->GetNeuralData = dlsym (dlh, "ns_GetNeuralData");
-  lib->GetIndexByTime = dlsym (dlh, "ns_GetIndexByTime");
-  lib->GetTimeByIndex = dlsym (dlh, "ns_GetTimeByIndex");
-  lib->GetLastErrorMsg = dlsym (dlh, "ns_GetLastErrorMsg");
-
   lib_handle = PyCObject_FromVoidPtr (lib, NULL);
-  
+
   return lib_handle;
 }
 
@@ -231,18 +384,13 @@ library_close (PyObject *self, PyObject *args, PyObject *kwds)
       PyErr_SetString (PyExc_TypeError, "Expected NsLibrary type");
       return NULL;
     }
-  
-  lib = PyCObject_AsVoidPtr (cobj);
-  
-  res = dlclose (lib->dl_handle);
-  
-  if (res != 0)
-    {
-      PyErr_Format (PgError, "Could not load library: %s", dlerror ());
-      return NULL;
-    }
 
-  free (lib);
+  lib = PyCObject_AsVoidPtr (cobj);
+
+  res = dl_unload_library (lib);
+
+  if (res != 0)
+    return NULL;
 
   Py_RETURN_NONE;
 }
@@ -365,7 +513,6 @@ do_open_file (PyObject *self, PyObject *args, PyObject *kwds)
     }
   else
     tuple = NULL;
-    
 
   return tuple;
 }
@@ -518,7 +665,7 @@ get_and_add_segment_info (NsLibrary *lib,
   ns_SEGMENTINFO  info;
   ns_RESULT       res;
   PyObject       *list;
-  int             i;
+  unsigned int    i;
 
   res = lib->GetSegmentInfo (file_id, entity_id, &info, sizeof (info));
 

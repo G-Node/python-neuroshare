@@ -115,27 +115,19 @@
 // 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUC__)
+#if defined(_MSC_VER)
 
-	#include <stdint.h>
+  typedef signed __int8	   int8;
+  typedef unsigned __int8  uint8;
+  typedef signed __int16   int16;
+  typedef unsigned __int16 uint16;
+  typedef signed __int32   int32;
+  typedef unsigned __int32 uint32;
 
-	typedef int8_t   int8;
-	typedef uint8_t  uint8;
-	typedef int16_t  int16;
-	typedef uint16_t uint16;
-	typedef int32_t  int32;
-	typedef uint32_t uint32;
+  #pragma pack(push)
+  #pragma pack(4) // specify 4-byte structure alignment
 
-#elif defined(_MSC_VER)
-
-#if 0
-	typedef signed __int8	 int8;
-	typedef unsigned __int8	 uint8;
-	typedef signed __int16	 int16;
-	typedef unsigned __int16 uint16;
-	typedef signed __int32	 int32;
-	typedef unsigned __int32 uint32;
-#endif
+#else
 
   #include <stdint.h>
 
@@ -146,7 +138,7 @@
   typedef int32_t  int32;
   typedef uint32_t uint32;
 
-    #pragma pack(4) // specify 4-byte structure alignment
+
 #endif
 
 
@@ -326,5 +318,9 @@ typedef struct
 	uint32 dwSourceUnitID;    // Optional sorted unit ID number used in the source entity
 	char   szProbeInfo[128];  // Additional probe text information or source entity label
 } ns_NEURALINFO;
+
+#if defined(_MSC_VER)
+#  pragma pack(pop)
+#endif
 
 #endif
