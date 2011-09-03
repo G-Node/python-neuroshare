@@ -58,6 +58,31 @@ class File(object):
     def entity_count(self):
         return self._info['EntityCount']
 
+    @property
+    def time_span(self):
+        return self._info['TimeSpan']
+
+    @property
+    def time_stamp_resolution(self):
+        return self.info['TimeStampResolution']
+
+    @property
+    def ctime(self):
+        from datetime import datetime
+
+        year = self._info['Time_Year']
+        month = self._info['Time_Month']
+        day = self._info['Time_Day']
+        hour = self._info['Time_Hour']
+        minute = self._info['Time_Min']
+        sec = self._info['Time_Sec']
+        millisec = self._info['Time_MilliSec']
+
+        msec = millisec * 1000
+        ct = datetime (year, month, day, hour, minute, sec, msec)
+        return ct
+
+
     def get_entity(self, entity_id):
 
         info = self._lib._get_entity_info (self, entity_id)
