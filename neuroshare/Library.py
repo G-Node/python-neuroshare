@@ -181,6 +181,33 @@ class Library(object):
     def creator(self):
         return self._info['Creator']
 
+    @property
+    def description(self):
+        return self._info['Description']
+
+    @property
+    def api_version(self):
+        major = self._info['APIVersionMaj']
+        minor = self._info['APIVersionMin']
+        return (major, minor)
+
+    @property
+    def library_version(self):
+        major = self._info['LibVersionMaj']
+        minor = self._info['LibVersionMin']
+        return (major, minor)
+
+    @property
+    def max_files(self):
+        return self._info['MaxFiles']
+
+    @property
+    def mtime(self):
+        from datetime import date
+        year = self._info['Time_Year']
+        month = self._info['Time_Month']
+        day = self._info['Time_Day']
+        return date(year, month, day)
 
     @property
     def name(self):
