@@ -18,10 +18,12 @@ class EntityProxy(object):
             yield self[x]
 
 class File(object):
+
     def __init__(self, filename, library=None):
+        self._handle = None
         if not library:
             library = load_library_for_file (filename)
-     
+
         self._lib = library
         (handle, info) = self._lib._open_file (filename)
         self._handle = handle
@@ -32,7 +34,9 @@ class File(object):
         self.close ()
 
     def close(self):
-        self._lib._close_file (self)
+        if self._handle:
+            self._lib._close_file (self)
+            self._handle = None
 
     @property
     def library(self):
