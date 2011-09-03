@@ -21,6 +21,7 @@ class File(object):
 
     def __init__(self, filename, library=None):
         self._handle = None
+        self._filename = filename
         if not library:
             library = load_library_for_file (filename)
 
@@ -115,3 +116,6 @@ class File(object):
     @property
     def _get_handle(self):
         return self._handle
+
+    def __repr__(self):
+        return 'neuroshare.File(%r)' % (self._filename)
