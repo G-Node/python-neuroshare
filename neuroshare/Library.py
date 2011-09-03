@@ -65,7 +65,8 @@ class Library(object):
     def __init__(self, path):
         self._handle = _capi.library_open (path)
         self._open_files = []
-        
+        self._info = _capi._get_library_info (self._handle)
+
     def _open_file(self, filename):
         nsfile = _capi._open_file (self._handle, filename)
         self._open_files.append (nsfile)
@@ -132,7 +133,10 @@ class Library(object):
 
     def __del__(self):
         _capi.library_close(self._handle)
-        
 
-    
-   
+    @property
+    def creator(self):
+        return self._info['Creator']
+
+
+
