@@ -849,7 +849,7 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       NULL);
   
   buffer = (double *) PyArray_DATA (array);
-  buffer_size = PyArray_NBYTES (array);
+  buffer_size = (uint32) PyArray_NBYTES (array);
 
   res = lib->GetSegmentData (file_id,
 			     entity_id,
