@@ -54,7 +54,7 @@ def _find_dll(library_name):
         
     return None
 
-def load_library_for_file(filename):
+def find_library_for_file(filename):
 
     dll_map = {"mcd" : "nsMCDLibrary",
                "plx": "nsPlxLibrary",
@@ -80,27 +80,45 @@ def load_library_for_file(filename):
     if not path:
         raise DLLNotFound (root, ext, library_name)
 
-    #FIXME: cach open libraries
-    lib = Library (path)
-    return lib
+    return (library_name, path)
+
+
+def load_library_for_file(filename):
+    return Library.for_file (filename)
+
+### Library Implementation
 
 from File import File
-    
+
 class Library(object):
-    def __init__(self, path):
+
+    _loaded_libs = {}
+
+    @classmethod
+    def for_file(cls, filename):
+        (name, path) = find_library_for_file (filename)
+        if not cls._loaded_libs.has_key (name):
+            lib = Library (name, path)
+            cls._loaded_libs[name] = lib
+
+        return cls._loaded_libs[name]
+
+    def __init__(self, name, path):
+        self._name = name
+        self._path = path
         self._handle = _capi.library_open (path)
         self._open_files = []
         self._info = _capi._get_library_info (self._handle)
 
     def _open_file(self, filename):
-        nsfile = _capi._open_file (self._handle, filename)
-        self._open_files.append (nsfile)
-        return nsfile
+        (fh, file_info) = _capi._open_file (self._handle, filename)
+        self._open_files.append (fh)
+        return (fh, file_info)
 
     def _close_file(self, file):
         fh = file._handle
         _capi._close_file (self._handle, fh)
-        #self._open_files.remove (fh)
+        self._open_files.remove (fh)
 
     def _get_entity_info(self, nsfile, entity_id):
         fh = nsfile._handle
@@ -163,5 +181,13 @@ class Library(object):
     def creator(self):
         return self._info['Creator']
 
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def path(self):
+        return self._path
 
 
