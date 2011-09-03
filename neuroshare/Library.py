@@ -11,7 +11,7 @@ def _find_dll(library_name):
         dll_suffix = "so"
     elif platform.startswith('darwin'):
         dll_suffix = "dylib"
-    elif platfrom.startswith('win'):
+    elif platform.startswith('win'):
         dll_suffix = "dll"
     else:
         dll_suffix = "error"
