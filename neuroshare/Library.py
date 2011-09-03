@@ -2,6 +2,31 @@ import os
 import sys
 import _capi
 
+class ArgumentError(Exception):
+    def __init__(self, arg, msg):
+        self.arg = arg
+        self.msg = msg
+
+    def __str__(self):
+        return "\"%s\": %s" % (self.arg, self.msg)
+
+class DLLException(Exception):
+    def __init__(self, name, ext, lib=None):
+        self.name = name
+        self.ext = ext
+        self.lib = lib
+
+
+class DLLTypeUnknown(DLLException):
+    def __str__(self):
+        return '"%s": Unknown library type.' % (self.ext)
+
+
+class DLLNotFound(DLLException):
+    def __str__(self):
+        return 'Vendor DLL "%s" could not be found' % (self.lib)
+
+
 def _find_dll(library_name):
     
     known_paths = ["~/.neuroshare", "/usr/lib/neuroshare", "/usr/local/lib/neuroshare"];
@@ -36,15 +61,15 @@ def load_library_for_file(filename):
                "map": "nsAOLibrary",
                "nev": "nsNEVLibrary",
                "nex": "NeuroExplorerNeuroShareLibrary"}
-    
+
     (root, ext) = os.path.splitext(filename)
     if not ext or not ext.startswith('.'):
-        print 'ERROR' #FIXME: raise exception
+        raise ArgumentError (filename, "Could find file extension");
 
     ext = ext[1:]
-    
+
     if not dll_map.has_key (ext):
-        print 'ERRPR' #FIXME: raise ex
+        raise DLLTypeUnknown (root, ext)
 
     library_name = dll_map[ext]
     path = _find_dll (library_name)
@@ -53,8 +78,8 @@ def load_library_for_file(filename):
         path = _find_dll ("nsWineLibrary")
 
     if not path:
-        print "ERROR !!"
-    
+        raise DLLNotFound (root, ext, library_name)
+
     #FIXME: cach open libraries
     lib = Library (path)
     return lib
