@@ -7,9 +7,9 @@ This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used 
    
 2. Adjust your conf.py as follows:
 
-    sys.path.append(os.path.abspath('_themes'))
+    `sys.path.append(os.path.abspath('_themes'))
     html_theme_path = ['_themes']
-    html_theme = 'gnode'
+    html_theme = 'gnode'`
 
 The following themes exist:
 
