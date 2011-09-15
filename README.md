@@ -1,4 +1,4 @@
-#Flask Sphinx Styles
+#G-Node Sphinx Styles
 
 This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used by the [German INCF Node](http://www.g-node.org). Their basic design is derived from [Flask](http://flask.pocoo.org)'s beautiful documentation. If you want to use it in your projects, follow these steps:
 
