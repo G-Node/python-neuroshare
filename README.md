@@ -1,20 +1,20 @@
 #G-Node Sphinx Styles
 
-This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used by the [German INCF Node](http://www.g-node.org). Their basic design is derived from [Flask](http://flask.pocoo.org)'s beautiful documentation. If you want to use it in your projects, follow these steps:
+This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used by the [German INCF Node](http://www.g-node.org). Their basic design is derived from [Flask](http://flask.pocoo.org)'s documentation. If you want to use it in your projects, follow these steps:
 
 1. Set up a git submodule in your documentation folder under '_themes' that
-   checks out the contents of this repository.
+   checks out the contents of this repository, or copy the files by hand.
    
 2. Adjust your conf.py as follows:
 
-    `sys.path.append(os.path.abspath('_themes'))
-    html_theme_path = ['_themes']
-    html_theme = 'gnode'`
+        sys.path.append(os.path.abspath('_themes'))
+        html_theme_path = ['_themes']
+        html_theme = 'gnode'`
 
-The following themes exist:
+The following themes currently exist:
 
-- 'gnode'
-- 'gnode_small' - Smaller version of the fully-fledged theme for one-page documentation.
+- _gnode_
+- _gnode_small_ - Smaller version of the fully-fledged theme for one-page documentation.
 
 Following the Flask themes, a number of options exist for the gnode_small theme:
 
@@ -24,4 +24,6 @@ Following the Flask themes, a number of options exist for the gnode_small theme:
                                  h1 in the index.rst file.
     index_logo_height = 120px    height of the index logo
     github_fork = ''             repository name on github for the
-                                "fork me" badge
+                                 "fork me" badge
+                              
+__Acknowledgements__: Many thanks to Armin Ronacher for publishing and open-sourcing the templates.
