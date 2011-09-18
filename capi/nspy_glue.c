@@ -710,6 +710,52 @@ get_and_add_neural_info (NsLibrary *lib,
   return ns_OK;
 }
 
+static PyObject *
+get_times_for_entity (NsLibrary *lib,
+                      uint32     file_id,
+                      uint32     entity_id,
+                      uint32     index,
+                      uint32     length)
+{
+  PyObject  *array;
+  ns_RESULT  res;
+  npy_intp   dims[1];
+  double    *data;
+  int        i;
+
+  dims[0] = length;
+
+  array = PyArray_New (&PyArray_Type,
+		       1,
+		       dims,
+		       NPY_DOUBLE,
+		       NULL,
+		       NULL /* data */,
+		       0 /* itemsize */,
+		       NPY_CARRAY,
+		       NULL);
+
+  data = (double *) PyArray_DATA (array);
+
+  for (i = 0; i < length; i++)
+    {
+       res = lib->GetTimeByIndex (file_id,
+                                  entity_id,
+                                  index + i,
+                                  (data + i));
+       if (res != ns_OK)
+         break;
+    }
+
+    if (check_result_is_error (res, lib))
+      {
+        Py_DECREF (array);
+        return NULL;
+      }
+
+  return array;
+}
+
 /* ************************************************************************** */
 /* "public" API */
 
@@ -875,6 +921,7 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
   PyObject       *iobj, *id_obj, *idx_obj, *sz_obj;
   PyObject       *res_obj;
   PyObject       *array;
+  PyObject       *times;
   uint32          file_id;
   uint32          entity_id;
   uint32          index;
@@ -932,9 +979,22 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
 
-  res_obj = PyTuple_New (2);
+  times = get_times_for_entity (lib,
+                                file_id,
+                                entity_id,
+                                index,
+                                count);
+
+  if (times == NULL)
+    {
+      Py_DECREF (array);
+      return NULL;
+    }
+
+  res_obj = PyTuple_New (3);
   PyTuple_SetItem (res_obj, 0, array);
-  PyTuple_SetItem (res_obj, 1, PyInt_FromLong (cont_count));
+  PyTuple_SetItem (res_obj, 1, times);
+  PyTuple_SetItem (res_obj, 2, PyInt_FromLong (cont_count));
 
   return res_obj;
 }
