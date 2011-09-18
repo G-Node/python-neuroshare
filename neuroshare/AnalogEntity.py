@@ -69,7 +69,10 @@ class AnalogEntity(Entity):
     def probe_info(self):
         return self._info['ProbeInfo']
 
-    def get_data (self, index, count):
+    def get_data (self, index=0, count=-1):
+        if count < 0:
+            count = self.item_count
+
         lib = self.file.library
         data = lib._get_analog_data (self, index, count)
         return data
