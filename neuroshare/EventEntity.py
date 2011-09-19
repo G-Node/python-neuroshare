@@ -2,6 +2,12 @@
 from Entity import *
 
 class EventEntity(Entity):
+    EVENT_TEXT  = 1
+    EVENT_CSV   = 2
+    EVENT_BYTE  = 3
+    EVENT_WORD  = 4
+    EVENT_DWORD = 5
+
     def __init__(self, nsfile, eid, info):
         super(EventEntity,self).__init__(eid, nsfile, info)
 
