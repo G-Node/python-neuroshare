@@ -17,6 +17,9 @@ class EntityProxy(object):
         for x in xrange (0, self._nsfile.entity_count):
             yield self[x]
 
+    def __len__(self):
+        return self._nsfile.entity_count
+
 class File(object):
 
     def __init__(self, filename, library=None):
