@@ -15,8 +15,10 @@ class NeuralEntity(Entity):
     @property
     def source_unit_id(self):
         return self._info['SourceUnitID']
-        
-    def get_data (self, index, count):
+
+    def get_data (self, index=0, count=-1):
         lib = self.file.library
+        if count < 0:
+            count = self.item_count
         data = lib._get_neural_data (self, index, count)
         return data
