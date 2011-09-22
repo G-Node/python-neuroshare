@@ -9,7 +9,7 @@ This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used 
 
         sys.path.append(os.path.abspath('_themes'))
         html_theme_path = ['_themes']
-        html_theme = 'gnode'`
+        html_theme = 'gnode'
 
 The following themes currently exist:
 
