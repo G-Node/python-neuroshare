@@ -1,6 +1,6 @@
 #G-Node Sphinx Styles
 
-This repo is home to the in-house [Sphinx](http://sphinx.pocoo.org) themes used by the [German INCF Node](http://www.g-node.org). Their basic design is derived from [Flask](http://flask.pocoo.org)'s documentation. If you want to use it in your projects, follow these steps:
+This repo is home to in-house [Sphinx](http://sphinx.pocoo.org) themes used by the [German INCF Node](http://www.g-node.org). Their basic design is derived from [Flask](http://flask.pocoo.org)'s documentation. If you want to use it in your projects, follow these steps:
 
 1. Set up a git submodule in your documentation folder under '_themes' that
    checks out the contents of this repository, or copy the files by hand.
@@ -16,7 +16,7 @@ The following themes currently exist:
 - _gnode_
 - _gnode_small_ - Smaller version of the fully-fledged theme for one-page documentation.
 
-Following the Flask themes, a number of options exist for the gnode_small theme:
+Following Flask's themes, a number of options exist for _gnode_ themes:
 
     [options]
     index_logo = ''              filename of a picture in _static
