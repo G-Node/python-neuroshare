@@ -96,7 +96,11 @@ class SourcesBag(object):
 
 class SegmentEntity(Entity):
     def __init__(self, nsfile, eid, info):
-        super(SegmentEntity,self).__init__(eid, nsfile, info)
+        from copy import copy
+        self._source_infos = info['SourceInfos']
+        pure_info = copy(info)
+        del pure_info['SourceInfos']
+        super(SegmentEntity,self).__init__(eid, nsfile, pure_info)
 
     @property
     def max_sample_count(self):
@@ -108,7 +112,7 @@ class SegmentEntity(Entity):
 
     @property
     def sources(self):
-        return SourcesBag(self, self._info['SourceInfos'])
+        return SourcesBag(self, self._source_infos)
 
     def get_data (self, index):
         lib = self.file.library
