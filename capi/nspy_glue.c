@@ -167,7 +167,11 @@ check_result_is_error (ns_RESULT res, NsLibrary *lib)
 
   err_res = lib->GetLastErrorMsg (buf, sizeof (buf));
 
-  PyErr_Format (PgError, "Neuroshare-Error (%d): %s", res, buf);
+  if (err_res == ns_OK)
+    PyErr_Format (PgError, "Neuroshare-Error (%d): %s", res, buf);
+  else
+    PyErr_Format (PgError, "Internal Neuroshare-Error: %d", res);
+
   return 1;
 }
 
