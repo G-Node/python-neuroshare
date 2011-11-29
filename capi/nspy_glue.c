@@ -723,6 +723,7 @@ get_times_for_entity (NsLibrary *lib,
   double    *data;
   int        i;
 
+  res = ns_OK;
   dims[0] = length;
 
   array = PyArray_New (&PyArray_Type,
