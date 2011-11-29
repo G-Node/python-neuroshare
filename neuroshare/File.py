@@ -51,6 +51,10 @@ class File(object):
         pass
 
     @property
+    def metadata_raw(self):
+        return self._info
+
+    @property
     def app_name(self):
         return self._info['AppName']
 

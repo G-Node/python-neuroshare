@@ -178,6 +178,10 @@ class Library(object):
         _capi.library_close(self._handle)
 
     @property
+    def metadata_raw(self):
+        return self._info
+
+    @property
     def creator(self):
         return self._info['Creator']
 

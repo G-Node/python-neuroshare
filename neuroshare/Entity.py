@@ -21,6 +21,10 @@ class Entity(object):
         return self._file
 
     @property
+    def metadata_raw(self):
+        return self._info
+
+    @property
     def label(self):
         """The label or name of the entity"""
         return self._info['EntityLabel']

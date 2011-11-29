@@ -15,6 +15,10 @@ class SegmentSource(object):
         return self._source_id
 
     @property
+    def metadata_raw(self):
+        return self._info
+
+    @property
     def min_value(self):
         return self._info['MinVal']
 
