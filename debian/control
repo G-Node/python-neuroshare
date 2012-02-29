@@ -1,0 +1,17 @@
+Source: python-neuroshare
+Priority: extra
+Maintainer: NeuroDebian Team <team@neuro.debian.net>
+Uploaders: Michael Hanke <mih@debian.org>
+Build-Depends: debhelper (>= 7.0.50~), python-all, python-support, python-numpy
+Standards-Version: 3.9.3
+Section: science
+Homepage: http://github.com/G-Node/python-neuroshare
+Vcs-Browser: http://github.com/G-Node/python-neuroshare
+Vcs-Git: git://github.com/G-Node/python-neuroshare.git
+
+Package: python-neuroshare
+Section: python
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-numpy
+XB-Python-Version: ${python:Versions}
+Description: python interface to

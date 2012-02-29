@@ -1,0 +1,5 @@
+python-neuroshare (0.8.4-1) UNRELEASED; urgency=low
+
+  * Initial Debian packaging. Closes: #
+
+ -- Michael Hanke <mih@debian.org>  Tue, 28 Feb 2012 22:29:59 +0100
