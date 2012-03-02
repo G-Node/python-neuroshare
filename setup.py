@@ -45,5 +45,6 @@ setup (name             = 'neuroshare',
        long_description = "\n".join(__doc__.split("\n")[2:]),
        classifiers      = classifiers,
        ext_modules      = [native_ext],
-       packages         = ['neuroshare']
+       packages         = ['neuroshare'],
+       scripts          = ['ns-convert']
        )
