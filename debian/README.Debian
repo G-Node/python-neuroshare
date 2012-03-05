@@ -1,0 +1,25 @@
+Python-Neuroshare for Debian
+----------------------------
+
+Python-Neuroshare relies on the vendor-specific libraries
+(DLLs) to access data files. All of them are free of charge
+and can be downloaded from the corresponding web site of the
+recording equipment manufacturer. 
+
+The following locations are searched for the DLLs (in 
+descending order):
+	~/.neuroshare
+	/usr/lib/neuroshare
+	/usr/local/lib/neuroshare
+
+A (possibly incomplete) list of available DLLs can be
+obtained from the neuroshare website:
+  http://neuroshare.sourceforge.net/DLLLinks.shtml
+
+Please note that you need the matching DLLs for your
+CPU architecture and platform (e.g. GNU/Linux, 64-bit).
+If you find yourself in the situation that there is no
+DLL for your specific architecture or platform not all
+hope is lost since the Neuroshare-WineProxy package
+provides a way to use the Windows (32 bit) vendor DLLs
+on GNU/Linux.
