@@ -9,10 +9,15 @@ Copyright: 2011, Christian Kellner <kellner@biologie.uni-muenchen.de>
 License: LGPL-2.1
 
 
-
 Files: debian/*
-Copyright: 2011, Michael Hanke <michael.hanke@gmail.com>
+Copyright: 2012, Michael Hanke <michael.hanke@gmail.com>
 License: LGPL-2.1
+
+
+Files: capi/nsAPIdllimp.h capi/nsAPItypes.h
+Copyright: 2003, Neuroshare Project <webmaster@neuroshare.org>
+License: LGPL-2.1
+
 
 
 License: LGPL-2.1
