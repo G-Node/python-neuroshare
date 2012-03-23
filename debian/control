@@ -15,9 +15,10 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
 XB-Python-Version: ${python:Versions}
 Description: Python interface and tools for Neuroshare
- The Neuroshare API is an interface for accessing electrophysiology data
- from files in proprietary formats. To do so it uses vendor-provided
- shared libraries that can be downloaded free of charge.
+
+ The Neuroshare API is an interface that accesses electrophysiology
+ data stored in files with different file formats. To do so, it uses
+ format-specific shared libraries.
  .
  This package provides a high-level Python interface to the Neuroshare
  API that focuses on convenience for the user and enables access to
