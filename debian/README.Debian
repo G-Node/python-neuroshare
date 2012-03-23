@@ -1,25 +1,28 @@
 Python-Neuroshare for Debian
 ----------------------------
 
-Python-Neuroshare relies on the vendor-specific libraries
-(DLLs) to access data files. All of them are free of charge
-and can be downloaded from the corresponding web site of the
-recording equipment manufacturer. 
+Python-Neuroshare relies on the file format-specific libraries
+(DLLs) to access data files. Most of them are directly provided
+by the recording equipment manufacturer itself and can be
+downloaded (as source code or as pre-compiled binary) from the
+corresponding web site.
+A (possibly incomplete) list of available DLLs and a link to
+their download location can be obtained from the Neuroshare
+website:
+  http://neuroshare.sourceforge.net/DLLLinks.shtml
 
-The following locations are searched for the DLLs (in 
-descending order):
+After the DLL has been obtained in needs to be installed in one
+of the following directories:
 	~/.neuroshare
 	/usr/lib/neuroshare
 	/usr/local/lib/neuroshare
+(The directories are searched through in descending order)
 
-A (possibly incomplete) list of available DLLs can be
-obtained from the neuroshare website:
-  http://neuroshare.sourceforge.net/DLLLinks.shtml
+Please note: Pre-compiled DLLs need to match your CPU architecture
+and platform (e.g. 64-bit, GNU/Linux).
 
-Please note that you need the matching DLLs for your
-CPU architecture and platform (e.g. GNU/Linux, 64-bit).
-If you find yourself in the situation that there is no
-DLL for your specific architecture or platform not all
-hope is lost since the Neuroshare-WineProxy package
-provides a way to use the Windows (32 bit) vendor DLLs
-on GNU/Linux.
+If you find yourself in the situation that there is no pre-compiled
+DLL for your specific architecture or platform and compiling from
+source is not an option not all hope is lost since the Neuroshare-
+WineProxy package provides a way to use the Windows (32 bit) vendor
+DLLs on GNU/Linux.
