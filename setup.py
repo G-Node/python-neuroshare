@@ -2,18 +2,19 @@
 """Python Bindings for Neuroshare
 ---------------------------------
 
-The Neuroshare API is an standardize API for accessing
-neurophysiology data stored in vendor-specific binary formats
-in a vendor-neutral way. See
-                   http://neuroshare.org
+The Neuroshare API is a standardized interface to access
+electrophysiology data stored in various different file
+formats. To do so, it uses format- specific shared libraries.
+Refer to the official website
+     		    http://neuroshare.org
 for more information.
 
 The aim of this library is to provide a high level interface
 to the Neuroshare API, i.e. it focuses on API usability more
 then being a mere python version of the C API. Thus none of
-the original Neuroshare API calls are directly exposed but the
-interface is through python objections that resemble (more or
-less) the Neuroshare Entities.
+the original Neuroshare API calls are directly exposed but
+the interface is through python objects that resemble (more
+or less) the Neuroshare Entities.
 """
 
 from distutils.core import setup, Extension
@@ -36,14 +37,15 @@ native_ext = Extension('neuroshare._capi',
                        sources = ['capi/nspy_glue.c'])
 
 setup (name             = 'neuroshare',
-       version          = '0.8.4',
+       version          = '0.8.5',
        author           = 'Christian Kellner',
        author_email     = 'kellner@biologie.uni-muenchen.de',
-       url              = 'https://github.com/G-Node/python-neuroshare',
+       url              = 'http://www.g-node.org/neuroshare-tools',
        keywords         = ['neuroshare'],
        description      = __doc__.split("\n")[0],
        long_description = "\n".join(__doc__.split("\n")[2:]),
        classifiers      = classifiers,
        ext_modules      = [native_ext],
-       packages         = ['neuroshare']
+       packages         = ['neuroshare'],
+       scripts          = ['ns-convert']
        )
