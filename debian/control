@@ -5,7 +5,7 @@ Uploaders: Christian Kellner <kellner@bio.lmu.de>, Michael Hanke <mih@debian.org
 Build-Depends: debhelper (>= 7.0.50~), python-all-dev, python-support, python-numpy, python-h5py
 Standards-Version: 3.9.3
 Section: science
-Homepage: http://github.com/G-Node/python-neuroshare
+Homepage: http://www.g-node.org/neuroshare-tools
 Vcs-Browser: http://github.com/G-Node/python-neuroshare
 Vcs-Git: git://github.com/G-Node/python-neuroshare.git
 
