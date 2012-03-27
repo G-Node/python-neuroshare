@@ -1,7 +1,7 @@
 python-neuroshare (0.8.5-1) UNRELEASED; urgency=low
 
   * Initial Debian packaging. Closes: #663116
-	Many thanks to Michael Hanke <mih@debian.org> for the initial
-	packaging help!
+    Many thanks to Michael Hanke <mih@debian.org> for the initial
+    packaging help!
 
- -- Christian Kellner <ck@xatom.net>   Tue, 27 Mar 2012 14:14:21 +0100
+ -- Christian Kellner <ck@xatom.net>  Tue, 27 Mar 2012 14:14:21 +0100
