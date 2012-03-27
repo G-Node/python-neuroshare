@@ -20,11 +20,12 @@ Installation
 ------------
 
 The compile-time requirements for python-neuroshare are the
-'setuptools' and the python development files and a working
-C compiler (clang, gcc). For Debian based distributions,
-e.g. Ubuntu, this can easily be done with:
+'setuptools' and the Python development files and a working
+C compiler (clang or gcc) and NumPy. For Debian based
+distributions, e.g. Ubuntu, this can easily be done with:
 
-	$ sudo apt-get install clang python-setuptools python-dev
+	$ sudo apt-get install clang python-setuptools \
+                               python-dev python-numpy
 
 After that, python-neuroshare is installed with the following
 command:
