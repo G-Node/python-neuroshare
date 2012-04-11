@@ -1,7 +1,13 @@
 python-neuroshare (0.8.5-1) UNRELEASED; urgency=low
 
+  [ Christian Kellner ]
   * Initial Debian packaging. Closes: #663116
     Many thanks to Michael Hanke <mih@debian.org> for the initial
     packaging help!
 
- -- Christian Kellner <ck@xatom.net>  Tue, 27 Mar 2012 14:14:21 +0100
+  [ Michael Hanke ]
+  * Call dh_humpy (if available) to get proper dependencies on the respective
+    NumPy ABI.
+  * Add missing build-dependency on python-setuptools.
+
+ -- Michael Hanke <mih@debian.org>  Wed, 11 Apr 2012 12:19:07 +0200
