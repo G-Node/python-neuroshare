@@ -4,3 +4,14 @@
 # one ring to rule them all ...
 %:
 	dh $@
+
+# hook for dh_numpy
+override_dh_lintian:
+	dh_lintian
+	# backport friendly
+	-[ -x /usr/bin/dh_numpy ] && dh_numpy
+
+override_dh_clean:
+	dh_clean
+	rm -rf neuroshare.egg-info
+
