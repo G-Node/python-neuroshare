@@ -1,4 +1,4 @@
-python-neuroshare (0.8.5-1) UNRELEASED; urgency=low
+python-neuroshare (0.8.5-1) unstable; urgency=low
 
   [ Christian Kellner ]
   * Initial Debian packaging. Closes: #663116
