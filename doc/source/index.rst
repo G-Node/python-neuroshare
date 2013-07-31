@@ -10,8 +10,25 @@
 API Reference
 =============
 
+File
+----
+.. autoclass:: File
+   :members:
+
+Entity
+------
+
 .. autoclass:: Entity
    :members:
+
+Event Entity
+------------
+
+.. autoclass:: EventEntity
+   :members:
+
+Analog Entity
+-------------
 
 .. autoclass:: AnalogEntity
    :members:
