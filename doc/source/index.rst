@@ -5,6 +5,16 @@
 .. toctree::
    :maxdepth: 2
 
+.. currentmodule:: neuroshare
+
+API Reference
+=============
+
+.. autoclass:: Entity
+   :members:
+
+.. autoclass:: AnalogEntity
+   :members:
 
 
 Indices and tables
