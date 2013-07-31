@@ -75,6 +75,14 @@ Iterate over the entities in the file::
        print entity.label, entity.entity_type
        ... do something else with entity ...
 
+Access analog signal data::
+
+    analog1 = fd.entities[1] #open analog signal entity
+    data, times, count = analog1.get_data() #load data
+
+data will contain the raw data, times the timepoints of
+each datapoint and count how many datapoints in data are
+actually continous
 
 Reporting Bugs & Submitting Patches
 -----------------------------------
