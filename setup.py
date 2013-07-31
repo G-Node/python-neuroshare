@@ -37,7 +37,7 @@ native_ext = Extension('neuroshare._capi',
                        sources = ['capi/nspy_glue.c'])
 
 setup (name             = 'neuroshare',
-       version          = '0.8.5',
+       version          = '0.8.6',
        author           = 'Christian Kellner',
        author_email     = 'kellner@biologie.uni-muenchen.de',
        url              = 'http://www.g-node.org/neuroshare-tools',
