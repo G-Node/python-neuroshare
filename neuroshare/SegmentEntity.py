@@ -1,6 +1,8 @@
 from Entity import *
 
 class SegmentSource(object):
+    """Segement sources provide access to the metadata of individual sources
+    of a :class:`SegementEntity`"""
     def __init__(self, segment, source_id, info):
         self._segment = segment
         self._source_id = source_id
@@ -36,18 +38,22 @@ class SegmentSource(object):
 
     @property
     def location_x(self):
+        """x coordinate [in meters]"""
         return self._info['LocationX']
 
     @property
     def location_y(self):
+        """y coordinate [in meters]"""
         return self._info['LocationY']
 
     @property
     def location_z(self):
+        """z coordinate [in meters]"""
         return self._info['LocationZ']
 
     @property
     def location_user(self):
+        """Additinal hardware specific location information"""
         return self._info['LocationUser']
 
     @property
@@ -76,6 +82,7 @@ class SegmentSource(object):
 
     @property
     def probe_info(self):
+        """Additional information"""
         return self._info['ProbeInfo']
 
 
@@ -95,6 +102,9 @@ class SourcesBag(object):
         
 
 class SegmentEntity(Entity):
+    """Segment entities contain cutouts of continuously sampled analog signals from
+    one or more sources that are usually short in time. Most prominent example are
+    waveforms of action potentials from one ore more electrodes."""
     def __init__(self, nsfile, eid, info):
         from copy import copy
         self._source_infos = info['SourceInfos']
@@ -104,17 +114,24 @@ class SegmentEntity(Entity):
 
     @property
     def max_sample_count(self):
+        """Maximum number of samples in each data item"""
         return self._info['MaxSampleCount']
 
     @property
     def source_count(self):
+        """Number of sources for this segement entity."""
         return self._info['SourceCount']
 
     @property
     def sources(self):
+        """Property that provides access to the metadata of the individual
+        sources of this entity.
+
+        Returns a sequenze of objects of type :class:`SegmentSource`."""
         return SourcesBag(self, self._source_infos)
 
     def get_data (self, index):
+        """Retrieve the data at ``index``'"""
         lib = self.file.library
         data = lib._get_segment_data (self, index)
         return data
