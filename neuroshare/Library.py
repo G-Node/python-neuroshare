@@ -29,7 +29,7 @@ class DLLNotFound(DLLException):
 
 def _find_dll(library_name):
     
-    known_paths = ["~/.neuroshare", "/usr/lib/neuroshare", "/usr/local/lib/neuroshare"];
+    known_paths = ["~/.neuroshare", "/usr/lib/neuroshare", "/usr/local/lib/neuroshare"]
     platform = sys.platform
 
     if platform.startswith('linux'):
@@ -47,7 +47,7 @@ def _find_dll(library_name):
     if os.path.lexists (dt):
         return dt
 
-    for cur_path in known_paths:
+    for cur_path in known_paths+sys.path:
         dt = os.path.join (os.path.expanduser (cur_path), dll_name)
         if os.path.lexists (dt):
             return dt
