@@ -17,9 +17,12 @@ the interface is through python objects that resemble (more
 or less) the Neuroshare Entities.
 """
 
-from distutils.core import setup, Extension
-import setuptools
-from distutils.extension import Extension
+try:
+    from setuptools import setup, Extension
+except ImportError:
+    from distutils.core import setup, Extension
+    from distutils.extension import Extension
+
 import numpy as np
 
 classifiers = [
@@ -47,5 +50,6 @@ setup (name             = 'neuroshare',
        classifiers      = classifiers,
        ext_modules      = [native_ext],
        packages         = ['neuroshare'],
-       scripts          = ['ns-convert']
+       scripts          = ['ns-convert'],
+       setup_requires   = ['sphinx', 'Sphinx-PyPI-upload']
        )
