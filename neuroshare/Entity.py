@@ -56,6 +56,9 @@ class Entity(object):
         """
         return self._file.library._get_index_by_time (self, timepoint, position)
 
+    def __len__(self):
+        return self.item_count
+
 class EntityType(object):
     Unkown = 0
     Event = 1
