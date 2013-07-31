@@ -594,7 +594,7 @@ get_and_add_analog_info (NsLibrary *lib,
   dict_set_item_eat_ref (dict, "SampleRate", PyFloat_FromDouble (info.dSampleRate));
   dict_set_item_eat_ref (dict, "MinVal", PyFloat_FromDouble (info.dMinVal));
   dict_set_item_eat_ref (dict, "MaxVal", PyFloat_FromDouble (info.dMaxVal));
-  dict_set_item_eat_ref (dict, "zUnits", PyString_FromString (info.szUnits));
+  dict_set_item_eat_ref (dict, "Units", PyString_FromString (info.szUnits));
 
   dict_set_item_eat_ref (dict, "Resolution", PyFloat_FromDouble (info.dResolution));
   dict_set_item_eat_ref (dict, "LocationX", PyFloat_FromDouble (info.dLocationX));
