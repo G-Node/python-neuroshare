@@ -3,7 +3,7 @@
 .. include:: ../../README
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
 .. currentmodule:: neuroshare
 
@@ -31,6 +31,18 @@ Analog Entity
 -------------
 
 .. autoclass:: AnalogEntity
+   :members:
+
+Neural Entity
+-------------
+
+.. autoclass:: NeuralEntity
+   :members:
+
+Segment Entity
+--------------
+
+.. autoclass:: SegmentEntity
    :members:
 
 
