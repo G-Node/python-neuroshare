@@ -2,6 +2,10 @@
 from Entity import *
 
 class EventEntity(Entity):
+    """Event entities represent specific timepoints with associated data,
+    e.g. a trigger events. Data can be binary (8, 16 or 32 bit) values, text
+    or comma separated values (cvs).
+    """
     EVENT_TEXT  = 1
     EVENT_CSV   = 2
     EVENT_BYTE  = 3
@@ -13,6 +17,12 @@ class EventEntity(Entity):
 
     @property
     def event_type(self):
+        """The type of the event:
+
+        * binary (8, 16, 32 bit) [``EVENT_BYTE, EVENT_WORD, EVENT_DWORD``]
+        * text                   [``EVENT_TEXT``]
+        * comma separated values (csv) [``EVENT_CSV``]
+        """
         return self._info['EventType']
 
     @property
@@ -24,6 +34,7 @@ class EventEntity(Entity):
         return self._info['MaxDataLength']
 
     def get_data (self, index):
+        """Retrieve the data at ``index``"""
         lib = self.file.library
         data = lib._get_event_data (self, index)
         return data
