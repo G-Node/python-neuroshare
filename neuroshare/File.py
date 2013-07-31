@@ -21,6 +21,13 @@ class EntityProxy(object):
         return self._nsfile.entity_count
 
 class File(object):
+    """Object that represents a datafile that can be open via neuroshare at
+    the location given by ``filename``. The file will be opened upon object
+    construction.
+
+    Individual entities can be opened via the :func:`get_entity` function or
+    the :func:`entities` property. NB: The first entity index is **0**
+    """
 
     def __init__(self, filename, library=None):
         self._handle = None
@@ -64,6 +71,7 @@ class File(object):
 
     @property
     def entity_count(self):
+        """The number of entities in this file"""
         return self._info['EntityCount']
 
     @property
@@ -76,6 +84,7 @@ class File(object):
 
     @property
     def ctime(self):
+        """The time when this file was created, i.e. the data recorded"""
         from datetime import datetime
 
         year = self._info['Time_Year']
@@ -92,7 +101,7 @@ class File(object):
 
 
     def get_entity(self, entity_id):
-
+        """Open the entity at the given index."""
         info = self._lib._get_entity_info (self, entity_id)
         entity_type = info['EntityType']
 
@@ -110,6 +119,8 @@ class File(object):
         return entity
 
     def list_entities(self, start=0, end=-1):
+        """List all entities. The range can be limited
+        via the ``start`` and ``end`` parameters."""
         if end == -1:
             end = self.entity_count
         
@@ -118,6 +129,11 @@ class File(object):
 
     @property
     def entities(self):
+        """Property that returns a proxy object to allow the opening of
+        entities in a via indexing, ie::
+
+            entity = datafile.entities[10] #retrieve the entity with at 10
+        """
         return self._eproxy
 
     @property
