@@ -58,7 +58,7 @@ class SegmentSource(object):
 
     @property
     def high_freq_corner(self):
-        return self._info['HighFreqOrder']
+        return self._info['HighFreqCorner']
     
     @property
     def high_freq_order(self):
@@ -70,7 +70,7 @@ class SegmentSource(object):
 
     @property
     def low_freq_corner(self):
-        return self._info['LowFreqOrder']
+        return self._info['LowFreqCorner']
     
     @property
     def low_freq_order(self):
