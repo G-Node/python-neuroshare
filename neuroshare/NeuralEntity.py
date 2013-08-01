@@ -10,6 +10,7 @@ class NeuralEntity(Entity):
 
     @property
     def probe_info(self):
+        """Additional information about the signal source"""
         return self._info['ProbeInfo']
 
     @property

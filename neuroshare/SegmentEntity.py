@@ -127,11 +127,13 @@ class SegmentEntity(Entity):
         """Property that provides access to the metadata of the individual
         sources of this entity.
 
-        Returns a sequenze of objects of type :class:`SegmentSource`."""
+        Returns a sequenze of objects of type :class:`SegmentSource`.
+        Metadata properties of a SegementSource are analogous to the
+        :class:`AnalogEntity`."""
         return SourcesBag(self, self._source_infos)
 
     def get_data (self, index):
-        """Retrieve the data at ``index``'"""
+        """Retrieve the data at ``index``"""
         lib = self.file.library
         data = lib._get_segment_data (self, index)
         return data
