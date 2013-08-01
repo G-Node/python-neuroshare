@@ -131,7 +131,7 @@ class File(object):
         via the ``start`` and ``end`` parameters."""
         if end == -1:
             end = self.entity_count
-        
+
         for x in xrange (start, end):
             yield self.get_entity(x)
 

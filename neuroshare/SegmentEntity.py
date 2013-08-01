@@ -31,7 +31,7 @@ class SegmentSource(object):
     @property
     def resolution(self):
         return self._info['Resolution']
-    
+
     @property
     def sub_sample_shift(self):
         return self._info['SubSampleShift']
@@ -59,11 +59,11 @@ class SegmentSource(object):
     @property
     def high_freq_corner(self):
         return self._info['HighFreqCorner']
-    
+
     @property
     def high_freq_order(self):
         return self._info['HighFreqOrder']
-    
+
     @property
     def high_filter_type(self):
         return self._info['HighFilterType']
@@ -71,11 +71,11 @@ class SegmentSource(object):
     @property
     def low_freq_corner(self):
         return self._info['LowFreqCorner']
-    
+
     @property
     def low_freq_order(self):
         return self._info['LowFreqOrder']
-    
+
     @property
     def low_filter_type(self):
         return self._info['LowFilterType']
@@ -99,7 +99,7 @@ class SourcesBag(object):
     def __iter__(self):
         for x in range(0, len (self._infos)):
             yield self[x]
-        
+
 
 class SegmentEntity(Entity):
     """Segment entities contain cutouts of continuously sampled analog signals from
