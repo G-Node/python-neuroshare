@@ -27,6 +27,7 @@ class AnalogEntity(Entity):
 
     @property
     def resolution(self):
+        """Minimal resolvable step size"""
         return self._info['Resolution']
 
     @property
