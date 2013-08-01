@@ -3,7 +3,7 @@ from Entity import *
 
 class EventEntity(Entity):
     """Event entities represent specific timepoints with associated data,
-    e.g. a trigger events. Data can be binary (8, 16 or 32 bit) values, text
+    e.g. trigger events. Data can be binary (8, 16 or 32 bit) values, text
     or comma separated values (cvs).
     """
     EVENT_TEXT  = 1

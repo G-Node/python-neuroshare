@@ -16,9 +16,9 @@ Neuroshare provides access to raw data and metadata (such as the sampling rate a
    :width: 580px
    :align: center
 
-Event entities represent specific timepoints with associated data, e.g. a trigger events.
+Event entities represent specific timepoints with associated data, e.g. trigger events.
 
-Analog signal entities represents continuously sampled, i.e. digitized, analog data. Examples are waveforms recorded via an electrode (mcroelectrodes, EKG, EEG).
+Analog signal entities represents continuously sampled, i.e. digitized, analog data. Examples are waveforms recorded via an electrode (microelectrodes, EKG, EEG).
 
 Segment entities contain cutouts of continuously sampled analog signals from one or more sources that are usually short in time. Most prominent example are waveforms of action potentials from one ore more electrodes.
 
@@ -45,7 +45,7 @@ The basic desgin of the API closely follows the Neuroshare entity model. For all
 * :class:`SegmentEntity` for Segements
 * :class:`NeuralEntity` for Neural entities
 
-All entity classes derive from a comment :class:`Entity` class that provides metadata common to all entites such as the label (:func:`Entity.label`) and how many data entries are contained in the entity (:func:`Entity.item_count` or just ``len(entity)``).
+All entity classes derive from a common :class:`Entity` class that provides metadata common to all entites such as the label (:func:`Entity.label`) and how many data entries are contained in the entity (:func:`Entity.item_count` or just ``len(entity)``).
 
 Opening a file is simply done by creating a :class:`neuroshare.File` object with the path to the datafile as constructor argument: ``fd = neuroshare.File('data.mcd')``. Individual enitities can be accessed via the :func:`File.get_entity` function or via indexing through the :func:`File.entities` property (e.g. ``File.entities[idx]``).
 

@@ -3,7 +3,7 @@ from Entity import Entity
 
 class AnalogEntity(Entity):
     """:class:`Entity` that represents continuously sampled, i.e. digitized, analog data.
-    Examples are waveforms recorded via an electrode (mcroelectrodes, EKG, EEG).
+    Examples are waveforms recorded via an electrode (microelectrodes, EKG, EEG).
     Actual data can be accessed via the :func:`get_data` function.
     .. note:: data may contain gaps (e.g. when no data is recorded between trails)
     """

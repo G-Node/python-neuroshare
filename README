@@ -12,7 +12,7 @@ The aim of this library is to provide a high level interface
 to the Neuroshare API, i.e. it focuses on API usability more
 then being a mere python version of the C API. Thus none of
 the original Neuroshare API calls are directly exposed but
-the interface is through python objects that resemble (more
+the interface consists of python objects that resemble (more
 or less) the Neuroshare Entities.
 
 
@@ -41,7 +41,7 @@ Installation of vendor DLLs
 ***************************
 
 Python-neuroshare relies on the vendor specific DLLs to
-access data failes. Therefore the specific DLLs for each
+access data files. Therefore the specific DLLs for each
 type of file must be downloaded and installed into one of
 the following locations::
 	/usr/local/lib/neuroshare
@@ -82,7 +82,7 @@ Access analog signal data::
 
 data will contain the raw data, times the timepoints of
 each datapoint and count how many datapoints in data are
-actually continous
+actually continous.
 
 Reporting Bugs & Submitting Patches
 -----------------------------------
