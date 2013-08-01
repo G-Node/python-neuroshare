@@ -257,7 +257,7 @@ dl dd {
  
 pre {
     padding: 0;
-    margin: 15px -30px;
+    margin: 15px 0px;
     padding: 8px;
     line-height: 1.3em;
     padding: 7px 30px;
@@ -268,8 +268,8 @@ pre {
 }
 
 dl pre {
-    margin-left: -60px;
-    padding-left: 60px;
+    margin-left:   0px;
+    padding-left: 30px;
 }
 
 tt {
