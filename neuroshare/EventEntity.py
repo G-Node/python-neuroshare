@@ -27,10 +27,12 @@ class EventEntity(Entity):
 
     @property
     def csv_desc(self):
+        """Description of the csv fields"""
         return self._info['CSVDesc']
 
     @property
     def max_data_length(self):
+        """Maximum lenght of the data for the event [in bytes]"""
         return self._info['MaxDataLength']
 
     @property
@@ -39,7 +41,10 @@ class EventEntity(Entity):
         return self._info['MinDataLength']
 
     def get_data (self, index):
-        """Retrieve the data at ``index``"""
+        """Retrieve the data at ``index``. Returns a 2-tuple with the
+        timestamp of the data at the first position (``[0]``) and the
+        actual data a the second position (``[1]``)).
+        Example use: ``timestamp, data = event.get_data(0)``"""
         lib = self.file.library
         data = lib._get_event_data (self, index)
         return data
