@@ -55,7 +55,8 @@ class File(object):
 
     @property
     def file_type(self):
-        pass
+        """Text description of the file type"""
+        return self._info['FileType']
 
     @property
     def metadata_raw(self):
