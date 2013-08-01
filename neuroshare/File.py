@@ -45,6 +45,7 @@ class File(object):
         self.close ()
 
     def close(self):
+        """Close the file."""
         if self._handle:
             self._lib._close_file (self)
             self._handle = None
@@ -64,10 +65,12 @@ class File(object):
 
     @property
     def app_name(self):
+        """The name of the application that created the file"""
         return self._info['AppName']
 
     @property
     def comment(self):
+        """Additional comments"""
         return self._info['FileComment']
 
     @property
@@ -77,15 +80,19 @@ class File(object):
 
     @property
     def time_span(self):
+        """Timespan of the data in the file [in seconds]"""
         return self._info['TimeSpan']
 
     @property
     def time_stamp_resolution(self):
+        """Minimum resolution of timestamps [in seconds]"""
         return self.info['TimeStampResolution']
 
     @property
     def ctime(self):
-        """The time when this file was created, i.e. the data recorded"""
+        """The time when this file was created, i.e. the data recorded.
+        Returns a :py:class:`datetime.datetime` object.
+        """
         from datetime import datetime
 
         year = self._info['Time_Year']
