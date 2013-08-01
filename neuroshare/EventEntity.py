@@ -33,6 +33,11 @@ class EventEntity(Entity):
     def max_data_length(self):
         return self._info['MaxDataLength']
 
+    @property
+    def min_data_length(self):
+        """Minimum lenght of the data for the event [in bytes]"""
+        return self._info['MinDataLength']
+
     def get_data (self, index):
         """Retrieve the data at ``index``"""
         lib = self.file.library
