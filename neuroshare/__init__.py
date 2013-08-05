@@ -1,4 +1,9 @@
 
+__author__ = 'Christian Kellner'
+__version__ = '0.9'
+__contact__ = 'kellner@biologie.uni-muenchen.de'
+__license__ = 'LGPL'
+
 from Library import Library
 from File import File
 from Entity import EntityType
