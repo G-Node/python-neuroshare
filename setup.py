@@ -24,9 +24,18 @@ except ImportError:
     from distutils.extension import Extension
 
 import numpy as np
+import os
+
+#parse metadata from neuroshare/__init__.py
+import re
+srcdir = os.path.dirname(__file__)
+path = os.path.join(srcdir, 'neuroshare', '__init__.py')
+txt_data = open(path).read()
+metadata = dict(re.findall("__([a-z]+)__ = [\"']([^\"']+)[\"']", txt_data))
+
 
 classifiers = [
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python',
         'Programming Language :: C',
         'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
@@ -40,16 +49,18 @@ native_ext = Extension('neuroshare._capi',
                        sources = ['capi/nspy_glue.c'])
 
 setup (name             = 'neuroshare',
-       version          = '0.8.8',
-       author           = 'Christian Kellner',
-       author_email     = 'kellner@biologie.uni-muenchen.de',
+       version          = metadata['version'],
+       author           = metadata['author'],
+       author_email     = metadata['contact'],
        url              = 'http://www.g-node.org/neuroshare-tools',
-       keywords         = ['neuroshare'],
+       keywords         = ['neuroshare', 'neuroscience', 'science'],
        description      = __doc__.split("\n")[0],
        long_description = "\n".join(__doc__.split("\n")[2:]),
+       license          = 'LGPL',
+       platforms        = ["Windows", "Linux", "Solaris", "Mac OS-X", "Unix"],
        classifiers      = classifiers,
        ext_modules      = [native_ext],
        packages         = ['neuroshare'],
        scripts          = ['ns-convert'],
-       setup_requires   = ['sphinx', 'Sphinx-PyPI-upload']
+       setup_requires   = ['Sphinx-PyPI-upload']
        )
