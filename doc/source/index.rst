@@ -2,7 +2,110 @@
 
 .. currentmodule:: neuroshare
 
-.. include:: ../../README
+Python Bindings for Neuroshare
+==============================
+
+The Neuroshare API is a standardized interface to access
+electrophysiology data stored in various different file
+formats. To do so, it uses format- specific shared libraries.
+Refer to the official website
+
+                  http://neuroshare.org
+
+for more information.
+
+The aim of this library is to provide a high level interface
+to the Neuroshare API, i.e. it focuses on API usability more
+then being a mere python version of the C API. Thus none of
+the original Neuroshare API calls are directly exposed but
+the interface consists of python objects that resemble (more
+or less) the Neuroshare Entities.
+
+
+Installation
+------------
+
+The compile-time requirements for python-neuroshare are the
+'setuptools' and the Python development files and a working
+C compiler (clang or gcc) and NumPy. For Debian based
+distributions, e.g. Ubuntu, this can easily be done with::
+
+	$ sudo apt-get install clang python-setuptools \
+                               python-dev python-numpy
+
+After that, python-neuroshare is installed with the following
+command::
+
+	$ sudo python setup.py install
+
+Additional runtime dependencies:
+	* The Neuroshare vendor DLLs for the specific data file(s)!
+	  Please refer to the following section for more information.
+
+
+Installation of vendor DLLs
+***************************
+
+Python-neuroshare relies on the vendor specific DLLs to
+access data files. Therefore the specific DLLs for each
+type of file must be downloaded and installed into one of
+the following locations::
+
+	/usr/local/lib/neuroshare
+	/usr/lib/neuroshare
+	~/.neuroshare
+
+A (possibly incomplete) list of the vendor specific DLLs
+can be obtained be obtained from the neuroshare website:
+
+  http://neuroshare.sourceforge.net/DLLLinks.shtml
+
+Please note that you need the corresponding DLLs for your
+platform (e.g. Linux, 64-bit). If you find yourself in the
+situation that there is no DLL for your specific platform
+and you are either on a UNIX-like system you can use G-Node's
+very one nswineproxy component to use the Windows 32 bit
+DLLs. Please refer to the nswineproxy homepage for more
+information:
+
+	https://github.com/G-Node/nswineproxy
+
+Quickstart
+----------
+
+Opening a file::
+
+    import neuroshare as ns
+    fd = ns.File ("NeuroshareExample.mcd")
+
+Iterate over the entities in the file::
+
+   for entity in fd.list_entities():
+       print entity.label, entity.entity_type
+       ... do something else with entity ...
+
+Access analog signal data::
+
+    analog1 = fd.entities[1] #open analog signal entity
+    data, times, count = analog1.get_data() #load data
+
+data will contain the raw data, times the timepoints of
+each datapoint and count how many datapoints in data are
+actually continous.
+
+Reporting Bugs & Submitting Patches
+-----------------------------------
+Any bugs can and should be filed to the project's issue
+tracker at github:
+
+	https://github.com/G-Node/python-neuroshare/issues
+
+Contact & Support
+-----------------
+Support and discussion of python-neuroshare related questions
+happen in the official G-Node IRC channel #gnode on the
+freenode IRC network (cf. http://freenode.net).
+
 
 User's Guide
 ============
