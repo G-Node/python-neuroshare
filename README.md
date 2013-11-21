@@ -8,3 +8,13 @@ formats.
 
 For information how to install and use it please refer to the
 [official documentation](http://pythonhosted.org/neuroshare/)
+
+
+----
+
+Support and discussion of python-neuroshare related questions
+happen in the official G-Node IRC channel #gnode on the
+freenode IRC network (cf. http://freenode.net).
+
+- - -
+[![Build Status](https://travis-ci.org/G-Node/python-neuroshare.png?branch=master)](https://travis-ci.org/G-Node/python-neuroshare)
