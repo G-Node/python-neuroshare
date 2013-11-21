@@ -1,0 +1,13 @@
+language: python
+
+virtualenv:
+  system_site_packages: true
+
+
+install:
+- sudo apt-get install python-numpy python-dev
+
+script:
+- python setup.py install
+- cd $HOME
+- python -c "import neuroshare"
