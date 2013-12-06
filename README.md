@@ -18,3 +18,5 @@ freenode IRC network (cf. http://freenode.net).
 
 - - -
 [![Build Status](https://travis-ci.org/G-Node/python-neuroshare.png?branch=master)](https://travis-ci.org/G-Node/python-neuroshare)
+[![PyPI version](https://badge.fury.io/py/neuroshare.png)](http://badge.fury.io/py/neuroshare)
+[![Downloads](https://pypip.in/d/neuroshare/badge.png)](https://pypi.python.org/pypi/neuroshare)
