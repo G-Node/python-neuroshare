@@ -1,0 +1,10 @@
+Document: python-neuroshare
+Title: Python interface and tools for Neuroshare 
+Author: Christian Kellner 
+Abstract: This is documentation of python-neuroshare module, which includes usage instructions,
+ examples and API reference.
+Section: Programming/Python
+
+Format: HTML
+Index: /usr/share/doc/python-neuroshare-doc/index.html
+Files: /usr/share/doc/python-neuroshare-doc/*.html
