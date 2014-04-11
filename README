@@ -5,14 +5,14 @@ The Neuroshare API is a standardized interface to access
 electrophysiology data stored in various different file
 formats. To do so, it uses format- specific shared libraries.
 Refer to the official website
-     		    http://neuroshare.org
+                  http://neuroshare.org
 for more information.
 
 The aim of this library is to provide a high level interface
 to the Neuroshare API, i.e. it focuses on API usability more
 then being a mere python version of the C API. Thus none of
 the original Neuroshare API calls are directly exposed but
-the interface is through python objects that resemble (more
+the interface consists of python objects that resemble (more
 or less) the Neuroshare Entities.
 
 
@@ -22,13 +22,13 @@ Installation
 The compile-time requirements for python-neuroshare are the
 'setuptools' and the Python development files and a working
 C compiler (clang or gcc) and NumPy. For Debian based
-distributions, e.g. Ubuntu, this can easily be done with:
+distributions, e.g. Ubuntu, this can easily be done with::
 
 	$ sudo apt-get install clang python-setuptools \
                                python-dev python-numpy
 
 After that, python-neuroshare is installed with the following
-command:
+command::
 
 	$ sudo python setup.py install
 
@@ -38,12 +38,12 @@ Additional runtime dependencies:
 
 
 Installation of vendor DLLs
-- - - - - - - - - - - - - -
+***************************
 
 Python-neuroshare relies on the vendor specific DLLs to
-access data failes. Therefore the specific DLLs for each
+access data files. Therefore the specific DLLs for each
 type of file must be downloaded and installed into one of
-the following locations:
+the following locations::
 	/usr/local/lib/neuroshare
 	/usr/lib/neuroshare
 	~/.neuroshare
@@ -61,20 +61,28 @@ DLLs. Please refer to the nswineproxy homepage for more
 information:
 	https://github.com/G-Node/nswineproxy
 
-Usage
------
+Quickstart
+----------
 
-   Opening a file:
+Opening a file::
 
-	>> import neuroshare as ns
-	>> fd = ns.File ("NeuroshareExample.mcd")
+    import neuroshare as ns
+    fd = ns.File ("NeuroshareExample.mcd")
 
-   Iterate over the entities in the file:
+Iterate over the entities in the file::
 
-   	>> for entity in fd.list_entities():
-        >>    print entity.label, entity.entity_type
-	>>    ... do something else with entity ...
+   for entity in fd.list_entities():
+       print entity.label, entity.entity_type
+       ... do something else with entity ...
 
+Access analog signal data::
+
+    analog1 = fd.entities[1] #open analog signal entity
+    data, times, count = analog1.get_data() #load data
+
+data will contain the raw data, times the timepoints of
+each datapoint and count how many datapoints in data are
+actually continous.
 
 Reporting Bugs & Submitting Patches
 -----------------------------------
