@@ -1,3 +1,22 @@
+python-neuroshare (0.9-1) UNRELEASED; urgency=low
+
+  * Fix typo in capi's AnalogInfo dict (gh issue #5)
+  * Also search in sys.path for the dll (gh issue #4)
+  * doc: Add documentation (sphinx-based) 
+  * Add __len__ to ns.Entity
+  * Analog+Segement: Fix [Low|High]FreqCorner metadata
+  * File: Fix file_type property to actually return data
+  * EventEntity: add min_data_length property
+  * EventEntity: Add more docstrings (complete)
+  * AnalogEntity: Add doctoring to resolution (now complete)
+  * Add metadata to __init__.py (version, author, contact, license)
+  * Use metadata in setup.py
+  * [debian] Add python-sphinx to build dependencies
+  * [debian] Add python-h5py to dependencies. (Closes: #684746)
+  * [debian] setup.py: Remove Sphinx-PyPI-upload
+
+ -- Christian Kellner <ck@xatom.net>  Fri, 11 Apr 2014 13:19:42 +0200
+
 python-neuroshare (0.8.5-1) UNRELEASED; urgency=low
 
   [ Christian Kellner ]
