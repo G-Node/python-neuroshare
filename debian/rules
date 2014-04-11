@@ -3,7 +3,7 @@
 
 # one ring to rule them all ...
 %:
-	dh $@
+	dh $@ --with python2
 
 # hook for dh_numpy
 override_dh_lintian:

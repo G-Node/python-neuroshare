@@ -2,7 +2,8 @@ Source: python-neuroshare
 Priority: extra
 Maintainer: G-Node Debian Team <debian-team@g-node.org>
 Uploaders: Christian Kellner <ck@xatom.net>, Michael Hanke <mih@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), python-all-dev, python-support, python-numpy, python-h5py, python-setuptools, python-sphinx
+Build-Depends: debhelper (>= 7.0.50~), python-all-dev, dh-python, python-numpy, python-h5py, python-setuptools, python-sphinx
+X-Python-Version: >= 2.6
 Standards-Version: 3.9.3
 Section: science
 Homepage: http://www.g-node.org/neuroshare-tools
@@ -13,7 +14,6 @@ Package: python-neuroshare
 Section: python
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-h5py
-XB-Python-Version: ${python:Versions}
 Description: Python interface and tools for Neuroshare
  The Neuroshare API is a standardized interface to access electrophysiology
  data stored in various different file formats. To do so, it uses format-
