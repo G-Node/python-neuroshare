@@ -12,7 +12,7 @@ Vcs-Git: git://github.com/G-Node/python-neuroshare.git
 Package: python-neuroshare
 Section: python
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-h5py
 XB-Python-Version: ${python:Versions}
 Description: Python interface and tools for Neuroshare
  The Neuroshare API is a standardized interface to access electrophysiology
