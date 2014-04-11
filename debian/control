@@ -2,7 +2,7 @@ Source: python-neuroshare
 Priority: extra
 Maintainer: G-Node Debian Team <debian-team@g-node.org>
 Uploaders: Christian Kellner <ck@xatom.net>, Michael Hanke <mih@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), python-all-dev, python-support, python-numpy, python-h5py, python-setuptools
+Build-Depends: debhelper (>= 7.0.50~), python-all-dev, python-support, python-numpy, python-h5py, python-setuptools, python-sphinx
 Standards-Version: 3.9.3
 Section: science
 Homepage: http://www.g-node.org/neuroshare-tools
