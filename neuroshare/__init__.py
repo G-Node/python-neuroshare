@@ -1,6 +1,6 @@
 
 __author__ = 'Christian Kellner'
-__version__ = '0.9'
+__version__ = '0.9.1'
 __contact__ = 'kellner@biologie.uni-muenchen.de'
 __license__ = 'LGPL'
 
