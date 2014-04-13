@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
+# prevent network access
+# cf. https://wiki.debian.org/Python/LibraryStyleGuide
+export http_proxy=http://127.0.9.1:9
+
 # one ring to rule them all ...
 %:
 	dh $@ --with python2,sphinxdoc
@@ -16,7 +20,10 @@ override_dh_clean:
 	rm -rf neuroshare.egg-info
 	rm -rf build/docs
 
-override_dh_auto_build:
-	dh_auto_build
+override_dh_sphinxdoc-arch:
+	#noop 
+
+override_dh_auto_install-indep:
+	# build the docs for the -doc pkg 
 	python setup.py build_sphinx --build-dir=build/docs
 
