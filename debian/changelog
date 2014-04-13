@@ -1,4 +1,17 @@
-python-neuroshare (0.9-1) UNRELEASED; urgency=low
+python-neuroshare (0.9.1-1) UNRELEASED; urgency=low
+
+  * New upstream release (0.9.1)
+
+  * debian/patches:
+    - Drop all patches (fixed upstream)
+    - Add a patch to remove sphinx-pipy-upload
+    - Clean _capi.so from neuroshare (inline extension building)
+
+  * debian/rules: Fix building of documentation
+
+ -- Christian Kellner <ck@xatom.net>  Sun, 13 Apr 2014 20:03:40 +0200
+
+python-neuroshare (0.9-1) unstable; urgency=low
 
   * New upstream release (0.9)
 
