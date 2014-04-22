@@ -1,4 +1,14 @@
-python-neuroshare (0.9.1-1) UNRELEASED; urgency=low
+python-neuroshare (0.9.1-2) unstable; urgency=low
+
+  * debian/watch:
+    - update to point to GitHub release page
+
+  * debian/rules:
+    - add get-orig-source target to fetch org. tarball
+
+ -- Christian Kellner <ck@xatom.net>  Tue, 22 Apr 2014 15:12:14 +0200
+
+python-neuroshare (0.9.1-1) unstable; urgency=low
 
   * New upstream release (0.9.1)
 
