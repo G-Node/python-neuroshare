@@ -1,6 +1,10 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
+srcpkg = $(shell LC_ALL=C dpkg-parsechangelog | grep '^Source:' | cut -d ' ' -f 2,2)
+debver = $(shell LC_ALL=C dpkg-parsechangelog | grep '^Version:' | cut -d ' ' -f 2,2 )
+upstreamver = $(shell echo $(debver) | cut -d '-' -f 1,1 )
+
 # prevent network access
 # cf. https://wiki.debian.org/Python/LibraryStyleGuide
 export http_proxy=http://127.0.9.1:9
@@ -28,3 +32,6 @@ override_dh_auto_install-indep:
 	# build the docs for the -doc pkg 
 	python setup.py build_sphinx --build-dir=build/docs
 
+get-orig-source:  $(info I: $(srcpkg)_$(upstreamver))
+	@echo "# Retrieving org tarball..."
+	uscan --noconf --verbose --rename --destdir=$(CURDIR) --check-dirname-level=0 --force-download --download-version $(upstreamver)
