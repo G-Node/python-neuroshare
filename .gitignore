@@ -8,4 +8,8 @@
 *.so
 
 build/
+dist/
 *.egg-info
+
+doc/build/*
+*.egg

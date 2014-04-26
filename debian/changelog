@@ -1,4 +1,50 @@
-python-neuroshare (0.8.5-1) unstable; urgency=low
+python-neuroshare (0.9.1-2) unstable; urgency=low
+
+  * debian/watch:
+    - update to point to GitHub release page
+
+  * debian/rules:
+    - add get-orig-source target to fetch org. tarball
+
+ -- Christian Kellner <ck@xatom.net>  Tue, 22 Apr 2014 15:12:14 +0200
+
+python-neuroshare (0.9.1-1) unstable; urgency=low
+
+  * New upstream release (0.9.1)
+
+  * debian/patches:
+    - Drop all patches (fixed upstream)
+    - Add a patch to remove sphinx-pipy-upload
+    - Clean _capi.so from neuroshare (inline extension building)
+
+  * debian/rules: Fix building of documentation
+
+ -- Christian Kellner <ck@xatom.net>  Sun, 13 Apr 2014 20:03:40 +0200
+
+python-neuroshare (0.9-1) unstable; urgency=low
+
+  * New upstream release (0.9)
+
+  * debian/control:
+    - Add python-neuroshare-doc package
+    - Switch to dh-python
+      - Depend on dh-python instead of python-support 
+      - Remove XB-Python-Version and replace with X-Python-Version
+    - Binary package depends on python-h5py (Closes: #684746)       	
+
+  * debian/rules:
+    - Changes for dh-python support
+    - Build sphix documentation 
+
+  * debian/patches:
+    - Add patches to fix doc package building
+
+  * debian/source/options:
+    - Ignore *.egg/ directories
+
+ -- Christian Kellner <ck@xatom.net>  Fri, 11 Apr 2014 13:19:42 +0200
+
+python-neuroshare (0.8.5-1) UNRELEASED; urgency=low
 
   [ Christian Kellner ]
   * Initial Debian packaging. Closes: #663116

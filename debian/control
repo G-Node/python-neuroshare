@@ -2,7 +2,8 @@ Source: python-neuroshare
 Priority: extra
 Maintainer: G-Node Debian Team <debian-team@g-node.org>
 Uploaders: Christian Kellner <ck@xatom.net>, Michael Hanke <mih@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), python-all-dev, python-support, python-numpy, python-h5py, python-setuptools
+Build-Depends: debhelper (>= 7.0.50~), python-all-dev, dh-python, python-numpy, python-h5py, python-setuptools, python-sphinx (>= 1.0.7+dfsg)
+X-Python-Version: >= 2.6
 Standards-Version: 3.9.3
 Section: science
 Homepage: http://www.g-node.org/neuroshare-tools
@@ -12,8 +13,7 @@ Vcs-Git: git://github.com/G-Node/python-neuroshare.git
 Package: python-neuroshare
 Section: python
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
-XB-Python-Version: ${python:Versions}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-h5py
 Description: Python interface and tools for Neuroshare
  The Neuroshare API is a standardized interface to access electrophysiology
  data stored in various different file formats. To do so, it uses format-
@@ -27,3 +27,23 @@ Description: Python interface and tools for Neuroshare
  In addition, this package contains the ns2hdf converter tool that converts
  neuroshare-compatible files into the HDF5 (Hierarchical Data Format, ver. 5)
  file format.
+
+Package: python-neuroshare-doc
+Architecture: all
+Depends: ${sphinxdoc:Depends}, ${misc:Depends}
+Section: doc
+Description: Python interface and tools for Neuroshare
+ The Neuroshare API is a standardized interface to access electrophysiology
+ data stored in various different file formats. To do so, it uses format-
+ specific shared libraries.
+ .
+ This package provides a high-level Python interface to the Neuroshare API
+ that focuses on convenience for the user and enables access to all available
+ metadata and data. The data is returned in NumPy arrays, which provides a
+ quick route to further examination and analysis.
+ .
+ In addition, this package contains the ns2hdf converter tool that converts
+ neuroshare-compatible files into the HDF5 (Hierarchical Data Format, ver. 5)
+ file format.
+ .
+ This package contains HTML documentation files for python-neuroshare.
