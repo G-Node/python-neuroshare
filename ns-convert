@@ -11,6 +11,7 @@ import getopt
 class ProgressIndicator(object):
     def __init__(self, offset=0):
         self._cur_value = offset
+        self._max_value = 0
 
     def setup(self, max_value):
         self._max_value = max_value
@@ -137,6 +138,7 @@ class ConsoleIndicator(ProgressIndicator):
     def __init__(self):
         super(ConsoleIndicator, self).__init__()
         self._size = 60
+        self._last_msg = ""
 
     def progress(self,  max_value, cur_value):
         size = self._size
