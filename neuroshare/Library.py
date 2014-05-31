@@ -117,8 +117,8 @@ class Library(object):
         self._open_files.append(fh)
         return fh, file_info
 
-    def _close_file(self, file):
-        fh = file._handle
+    def _close_file(self, nsfile):
+        fh = nsfile._handle
         _capi._close_file(self._handle, fh)
         self._open_files.remove(fh)
 
