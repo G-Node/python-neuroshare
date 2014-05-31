@@ -1,6 +1,5 @@
 
 from Library import *
-from Entity import *
 from EventEntity import *
 from AnalogEntity import *
 from SegmentEntity import *
