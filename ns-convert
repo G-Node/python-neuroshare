@@ -125,14 +125,14 @@ class Converter(object):
 
     @classmethod
     def dtype_by_event(cls, event):
-        type_map = {ns.EventEntity.EVENT_TEXT  : 's',
-                    ns.EventEntity.EVENT_CSV   : 's',
+        type_map = {ns.EventEntity.EVENT_TEXT  : 'a',
+                    ns.EventEntity.EVENT_CSV   : 'a',
                     ns.EventEntity.EVENT_BYTE  : 'b',
                     ns.EventEntity.EVENT_WORD  : 'h',
                     ns.EventEntity.EVENT_DWORD : 'i'}
         val_type = type_map[event.event_type]
-        if event.event_type < 2:
-            val_type + event.max_data_length
+        if val_type == 'a':
+            val_type += str(event.max_data_length)
         return np.dtype([('timestamp', 'd'), ('value', val_type)])
 
 
