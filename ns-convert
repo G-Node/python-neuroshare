@@ -116,13 +116,15 @@ class Converter(object):
         dset = group.create_dataset(name, data=data)
         self.copy_metdata(dset, neural.metadata_raw)
 
-    def copy_metdata(self, target, metadata, prefix=None):
+    @classmethod
+    def copy_metdata(cls, target, metadata, prefix=None):
         for (key, value) in metadata.iteritems():
             if prefix is not None:
                 key = prefix + key
             target.attrs[key] = value
 
-    def dtype_by_event(self, event):
+    @classmethod
+    def dtype_by_event(cls, event):
         type_map = {ns.EventEntity.EVENT_TEXT  : 's',
                     ns.EventEntity.EVENT_CSV   : 's',
                     ns.EventEntity.EVENT_BYTE  : 'b',
