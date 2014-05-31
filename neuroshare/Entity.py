@@ -52,7 +52,7 @@ class Entity(object):
         Options are:
 
         * before and inclusive of the timepoint (``EntityTime.Before``)
-        * after and inclsive of the timepoint (``EntityTime.After``)
+        * after and inclusive of the timepoint (``EntityTime.After``)
         * closest to timepoint (``EntityTime.Closest``) [default]
         """
         return self._file.library._get_index_by_time(self, timepoint, position)
@@ -62,6 +62,7 @@ class Entity(object):
 
 
 class EntityType(object):
+    Unknown = 0
     Unkown = 0
     Event = 1
     Analog = 2

@@ -2,8 +2,8 @@ from Entity import *
 
 
 class SegmentSource(object):
-    """Segement sources provide access to the metadata of individual sources
-    of a :class:`SegementEntity`"""
+    """Segment sources provide access to the metadata of individual sources
+    of a :class:`SegmentEntity`"""
     def __init__(self, segment, source_id, info):
         self._segment = segment
         self._source_id = source_id
@@ -54,7 +54,7 @@ class SegmentSource(object):
 
     @property
     def location_user(self):
-        """Additinal hardware specific location information"""
+        """Additional hardware specific location information"""
         return self._info['LocationUser']
 
     @property
@@ -120,7 +120,7 @@ class SegmentEntity(Entity):
 
     @property
     def source_count(self):
-        """Number of sources for this segement entity."""
+        """Number of sources for this segment entity."""
         return self._info['SourceCount']
 
     @property
@@ -128,8 +128,8 @@ class SegmentEntity(Entity):
         """Property that provides access to the metadata of the individual
         sources of this entity.
 
-        Returns a sequenze of objects of type :class:`SegmentSource`.
-        Metadata properties of a SegementSource are analogous to the
+        Returns a sequence of objects of type :class:`SegmentSource`.
+        Metadata properties of a SegmentSource are analogous to the
         :class:`AnalogEntity`."""
         return SourcesBag(self, self._source_infos)
 

@@ -6,7 +6,7 @@ The Neuroshare API is a standardized interface to access
 electrophysiology data stored in various different file
 formats. To do so, it uses format- specific shared libraries.
 Refer to the official website
-     		    http://neuroshare.org
+                http://neuroshare.org
 for more information.
 
 The aim of this library is to provide a high level interface
@@ -45,8 +45,8 @@ classifiers = [
         'Topic :: Software Development :: Libraries :: Python Modules']
 
 native_ext = Extension('neuroshare._capi',
-                       include_dirs = [np.get_include()],
-                       sources = ['capi/nspy_glue.c'])
+                       include_dirs=[np.get_include()],
+                       sources=['capi/nspy_glue.c'])
 
 setup (name             = 'neuroshare',
        version          = metadata['version'],

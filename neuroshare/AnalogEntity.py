@@ -63,7 +63,7 @@ class AnalogEntity(Entity):
 
     @property
     def high_freq_order(self):
-        """Order of the high frequncy filter"""
+        """Order of the high frequency filter"""
         return self._info['HighFreqOrder']
 
     @property
@@ -78,7 +78,7 @@ class AnalogEntity(Entity):
 
     @property
     def low_freq_order(self):
-        """Order of the high frequncy filter"""
+        """Order of the high frequency filter"""
         return self._info['LowFreqOrder']
 
     @property
@@ -96,7 +96,7 @@ class AnalogEntity(Entity):
         If no parameters are given retrieves all available data.
 
         Returns a tuple with three elements containing the raw data ``[0]``, the timestamp
-        of each data point ``[1]`` and how many of the data values are continous ``[2]``.
+        of each data point ``[1]`` and how many of the data values are continuous ``[2]``.
         Example use: ``data, times, count = analog1.get_data()``
 
         Raw data and timestamp data are return as :class:`numpy.ndarray`.

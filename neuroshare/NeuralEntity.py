@@ -18,7 +18,7 @@ class NeuralEntity(Entity):
     def source_entity_id(self):
         """[*Optional*] Id of the source entity of this spike, if any.
         For example the spike waveform of the action potential corresponding
-        to this spike might have been recoreded in a segment entity."""
+        to this spike might have been recorded in a segment entity."""
         return self._info['SourceEntityID']
 
     @property
