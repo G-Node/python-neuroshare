@@ -1,6 +1,7 @@
 
 from Entity import Entity
 
+
 class AnalogEntity(Entity):
     """:class:`Entity` that represents continuously sampled, i.e. digitized, analog data.
     Examples are waveforms recorded via an electrode (microelectrodes, EKG, EEG).
@@ -90,7 +91,7 @@ class AnalogEntity(Entity):
         """Additional information"""
         return self._info['ProbeInfo']
 
-    def get_data (self, index=0, count=-1):
+    def get_data(self, index=0, count=-1):
         """Retrieve raw data from file starting at ``index`` up to ``count`` elements.
         If no parameters are given retrieves all available data.
 
@@ -104,5 +105,5 @@ class AnalogEntity(Entity):
             count = self.item_count
 
         lib = self.file.library
-        data = lib._get_analog_data (self, index, count)
+        data = lib._get_analog_data(self, index, count)
         return data

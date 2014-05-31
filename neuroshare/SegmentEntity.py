@@ -1,5 +1,6 @@
 from Entity import *
 
+
 class SegmentSource(object):
     """Segement sources provide access to the metadata of individual sources
     of a :class:`SegementEntity`"""
@@ -92,12 +93,12 @@ class SourcesBag(object):
         self._segment = segment
 
     def __getitem__(self, key):
-        source_id = int (key)
+        source_id = int(key)
         source_info = self._infos[source_id]
-        return SegmentSource (self._segment, source_id, source_info)
+        return SegmentSource(self._segment, source_id, source_info)
 
     def __iter__(self):
-        for x in range(0, len (self._infos)):
+        for x in range(0, len(self._infos)):
             yield self[x]
 
 
@@ -110,7 +111,7 @@ class SegmentEntity(Entity):
         self._source_infos = info['SourceInfos']
         pure_info = copy(info)
         del pure_info['SourceInfos']
-        super(SegmentEntity,self).__init__(eid, nsfile, pure_info)
+        super(SegmentEntity, self).__init__(eid, nsfile, pure_info)
 
     @property
     def max_sample_count(self):
@@ -132,10 +133,8 @@ class SegmentEntity(Entity):
         :class:`AnalogEntity`."""
         return SourcesBag(self, self._source_infos)
 
-    def get_data (self, index):
+    def get_data(self, index):
         """Retrieve the data at ``index``"""
         lib = self.file.library
-        data = lib._get_segment_data (self, index)
+        data = lib._get_segment_data(self, index)
         return data
-
-

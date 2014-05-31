@@ -4,6 +4,7 @@ class EntityTime(object):
     Before = -1
     After = 1
 
+
 class Entity(object):
     """Base class of all entities that are contained in a neuroshare file
     """
@@ -43,7 +44,7 @@ class Entity(object):
 
     def get_time_by_index(self, index):
         """Convert from a given index to the corresponding timestamp"""
-        return self._file.library._get_time_by_index (self, index)
+        return self._file.library._get_time_by_index(self, index)
 
     def get_index_by_time(self, timepoint, position=EntityTime.Closest):
         """Convert from a given timestamp to the corresponding index.
@@ -54,10 +55,11 @@ class Entity(object):
         * after and inclsive of the timepoint (``EntityTime.After``)
         * closest to timepoint (``EntityTime.Closest``) [default]
         """
-        return self._file.library._get_index_by_time (self, timepoint, position)
+        return self._file.library._get_index_by_time(self, timepoint, position)
 
     def __len__(self):
         return self.item_count
+
 
 class EntityType(object):
     Unkown = 0
@@ -65,5 +67,3 @@ class EntityType(object):
     Analog = 2
     Segment = 3
     Neural = 4
-    
-

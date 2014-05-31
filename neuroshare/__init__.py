@@ -12,4 +12,3 @@ from EventEntity import EventEntity
 from AnalogEntity import AnalogEntity
 from SegmentEntity import SegmentEntity
 from NeuralEntity import NeuralEntity
-
