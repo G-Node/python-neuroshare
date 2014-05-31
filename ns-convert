@@ -51,7 +51,7 @@ class Converter(object):
                     3: 'Segment',
                     4: 'Neural'}
 
-        if not self._groups.has_key(entity_type):
+        if entity_type not in self._groups:
             name = name_map[entity_type]
             group = self._h5.create_group(name)
             self._groups[entity_type] = group
@@ -100,7 +100,7 @@ class Converter(object):
             name = 'SourceInfo.%d.' % index
             self.copy_metdata(seg_group, source.metadata_raw, prefix=name)
 
-        for index in xrange(0,segment.item_count):
+        for index in xrange(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
             dset = seg_group.create_dataset(name, data=data.T)

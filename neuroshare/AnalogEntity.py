@@ -9,7 +9,7 @@ class AnalogEntity(Entity):
     .. note:: data may contain gaps (e.g. when no data is recorded between trails)
     """
     def __init__(self, nsfile, eid, info):
-        super(AnalogEntity,self).__init__(eid, nsfile, info)
+        super(AnalogEntity, self).__init__(eid, nsfile, info)
 
     @property
     def sample_rate(self):

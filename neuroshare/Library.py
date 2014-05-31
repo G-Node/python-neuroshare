@@ -45,12 +45,12 @@ def _find_dll(library_name):
     
     dll_name = "%s.%s" % (library_name, dll_suffix)
     
-    dt = os.path.join(os.getcwd (), dll_name)
+    dt = os.path.join(os.getcwd(), dll_name)
     if os.path.lexists(dt):
         return dt
 
     for cur_path in known_paths+sys.path:
-        dt = os.path.join(os.path.expanduser (cur_path), dll_name)
+        dt = os.path.join(os.path.expanduser(cur_path), dll_name)
         if os.path.lexists(dt):
             return dt
         
@@ -59,7 +59,7 @@ def _find_dll(library_name):
 
 def find_library_for_file(filename):
 
-    dll_map = {"mcd" : "nsMCDLibrary",
+    dll_map = {"mcd": "nsMCDLibrary",
                "plx": "nsPlxLibrary",
                "map": "nsAOLibrary",
                "nev": "nsNEVLibrary",
@@ -71,7 +71,7 @@ def find_library_for_file(filename):
 
     ext = ext[1:]
 
-    if not dll_map.has_key(ext):
+    if ext not in dll_map:
         raise DLLTypeUnknown(root, ext)
 
     library_name = dll_map[ext]
@@ -99,7 +99,7 @@ class Library(object):
     @classmethod
     def for_file(cls, filename):
         (name, path) = find_library_for_file(filename)
-        if not cls._loaded_libs.has_key(name):
+        if name not in cls._loaded_libs:
             lib = Library(name, path)
             cls._loaded_libs[name] = lib
 
@@ -138,7 +138,7 @@ class Library(object):
         data = _capi._get_event_data(self._handle, fh, entity_id, index, event_type, max_data_len)
         return data
 
-    def _get_analog_data (self, analog, index, count):
+    def _get_analog_data(self, analog, index, count):
         fh = analog.file._handle
         entity_id = analog.id
         
