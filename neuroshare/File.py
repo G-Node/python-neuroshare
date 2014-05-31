@@ -87,7 +87,7 @@ class File(object):
     @property
     def time_stamp_resolution(self):
         """Minimum resolution of timestamps [in seconds]"""
-        return self.info['TimeStampResolution']
+        return self._info['TimeStampResolution']
 
     @property
     def ctime(self):
