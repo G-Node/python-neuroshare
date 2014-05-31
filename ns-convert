@@ -157,7 +157,7 @@ class ConsoleIndicator(ProgressIndicator):
         sys.stdout.flush()
 
 
-def main(argv):
+def main():
     opts, rem = getopt.getopt(sys.argv[1:], 'o:', ['output=',
                                                    'version=',
                                                    ])
@@ -179,5 +179,5 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    res = main(sys.argv[1:])
+    res = main()
     sys.exit(res)
