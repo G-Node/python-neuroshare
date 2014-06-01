@@ -62,5 +62,5 @@ setup (name             = 'neuroshare',
        ext_modules      = [native_ext],
        packages         = ['neuroshare'],
        scripts          = ['ns-convert'],
-       setup_requires   = ['Sphinx-PyPI-upload', 'numpy']
+       setup_requires   = ['Sphinx-PyPI-upload', 'numpy >= 1.7']
        )

@@ -20,6 +20,10 @@
  */
 
 #include <Python.h>
+
+//we want only fresh stuff
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+
 #include <numpy/arrayobject.h>
 #include <numpy/ndarrayobject.h>
 
@@ -737,10 +741,10 @@ get_times_for_entity (NsLibrary *lib,
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
 
-  data = (double *) PyArray_DATA (array);
+  data = (double *) PyArray_DATA ((PyArrayObject *) array);
 
   for (i = 0; i < length; i++)
     {
@@ -966,10 +970,10 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
   
-  buffer = PyArray_DATA (array);
+  buffer = PyArray_DATA ((PyArrayObject *) array);
 
   res = lib->GetAnalogData (file_id,
 			    entity_id,
@@ -1060,8 +1064,8 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       0,
 		       NULL);
   
-  buffer = (double *) PyArray_DATA (array);
-  buffer_size = (uint32) PyArray_NBYTES (array);
+  buffer = (double *) PyArray_DATA ((PyArrayObject *) array);
+  buffer_size = (uint32) PyArray_NBYTES ((PyArrayObject *) array);
 
   res = lib->GetSegmentData (file_id,
 			     entity_id,
@@ -1131,10 +1135,10 @@ do_get_neural_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
   
-  buffer = PyArray_DATA (array);
+  buffer = PyArray_DATA ((PyArrayObject *) array);
 
   res = lib->GetNeuralData (file_id,
 			    entity_id,
