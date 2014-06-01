@@ -1,5 +1,5 @@
 
-from Library import *
+from Library import Library
 from EventEntity import *
 from AnalogEntity import *
 from SegmentEntity import *
@@ -34,7 +34,7 @@ class File(object):
         self._handle = None
         self._filename = filename
         if not library:
-            library = load_library_for_file(filename)
+            library = Library.for_file(filename)
 
         self._lib = library
         (handle, info) = self._lib._open_file(filename)
