@@ -110,22 +110,22 @@ class Library(object):
         self._path = path
         self._handle = _capi.library_open(path)
         self._open_files = []
-        self._info = _capi._get_library_info(self._handle)
+        self._info = _capi.get_library_info(self._handle)
 
     def _open_file(self, filename):
-        (fh, file_info) = _capi._open_file(self._handle, filename)
+        (fh, file_info) = _capi.open_file(self._handle, filename)
         self._open_files.append(fh)
         return fh, file_info
 
     def _close_file(self, nsfile):
         fh = nsfile._handle
-        _capi._close_file(self._handle, fh)
+        _capi.close_file(self._handle, fh)
         self._open_files.remove(fh)
 
     def _get_entity_info(self, nsfile, entity_id):
         fh = nsfile._handle
         
-        info = _capi._get_entity_info(self._handle, fh, entity_id)
+        info = _capi.get_entity_info(self._handle, fh, entity_id)
         return info
 
     def _get_event_data(self, event, index):
@@ -135,14 +135,14 @@ class Library(object):
         event_type = event.event_type
         max_data_len = event.max_data_length
         
-        data = _capi._get_event_data(self._handle, fh, entity_id, index, event_type, max_data_len)
+        data = _capi.get_event_data(self._handle, fh, entity_id, index, event_type, max_data_len)
         return data
 
     def _get_analog_data(self, analog, index, count):
         fh = analog.file._handle
         entity_id = analog.id
         
-        data = _capi._get_analog_data(self._handle, fh, entity_id, index, count)
+        data = _capi.get_analog_data(self._handle, fh, entity_id, index, count)
         return data 
 
     def _get_segment_data(self, segment, index):
@@ -152,28 +152,28 @@ class Library(object):
         source_count = segment.source_count
         max_sample_count = segment.max_sample_count
         
-        data = _capi._get_segment_data(self._handle, fh, entity_id, index, source_count, max_sample_count)
+        data = _capi.get_segment_data(self._handle, fh, entity_id, index, source_count, max_sample_count)
         return data  
 
     def _get_neural_data(self, neural, index, count):
         fh = neural.file._handle
         entity_id = neural.id
         
-        data = _capi._get_neural_data(self._handle, fh, entity_id, index, count)
+        data = _capi.get_neural_data(self._handle, fh, entity_id, index, count)
         return data  
 
     def _get_time_by_index(self, entity, index):
         fh = entity.file._handle
         entity_id = entity.id
 
-        t = _capi._get_time_by_index(self._handle, fh, entity_id, index)
+        t = _capi.get_time_by_index(self._handle, fh, entity_id, index)
         return t
 
     def _get_index_by_time(self, entity, time, position):
         fh = entity.file._handle
         entity_id = entity.id
         
-        idx = _capi._get_index_by_time(self._handle, fh, entity_id, time, position)
+        idx = _capi.get_index_by_time(self._handle, fh, entity_id, time, position)
         return idx
 
     def __del__(self):
