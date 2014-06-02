@@ -148,5 +148,9 @@ class File(object):
     def _get_handle(self):
         return self._handle
 
+    @property
+    def handle(self):
+        return self._handle
+
     def __repr__(self):
         return 'neuroshare.File(%r)' % self._filename

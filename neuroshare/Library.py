@@ -118,18 +118,18 @@ class Library(object):
         return fh, file_info
 
     def _close_file(self, nsfile):
-        fh = nsfile._handle
+        fh = nsfile.handle
         _capi.close_file(self._handle, fh)
         self._open_files.remove(fh)
 
     def _get_entity_info(self, nsfile, entity_id):
-        fh = nsfile._handle
+        fh = nsfile.handle
         
         info = _capi.get_entity_info(self._handle, fh, entity_id)
         return info
 
     def _get_event_data(self, event, index):
-        fh = event.file._handle
+        fh = event.file.handle
         entity_id = event.id
         
         event_type = event.event_type
@@ -139,14 +139,14 @@ class Library(object):
         return data
 
     def _get_analog_data(self, analog, index, count):
-        fh = analog.file._handle
+        fh = analog.file.handle
         entity_id = analog.id
         
         data = _capi.get_analog_data(self._handle, fh, entity_id, index, count)
         return data 
 
     def _get_segment_data(self, segment, index):
-        fh = segment.file._handle
+        fh = segment.file.handle
         entity_id = segment.id
 
         source_count = segment.source_count
@@ -156,21 +156,21 @@ class Library(object):
         return data  
 
     def _get_neural_data(self, neural, index, count):
-        fh = neural.file._handle
+        fh = neural.file.handle
         entity_id = neural.id
         
         data = _capi.get_neural_data(self._handle, fh, entity_id, index, count)
         return data  
 
     def _get_time_by_index(self, entity, index):
-        fh = entity.file._handle
+        fh = entity.file.handle
         entity_id = entity.id
 
         t = _capi.get_time_by_index(self._handle, fh, entity_id, index)
         return t
 
     def _get_index_by_time(self, entity, time, position):
-        fh = entity.file._handle
+        fh = entity.file.handle
         entity_id = entity.id
         
         idx = _capi.get_index_by_time(self._handle, fh, entity_id, time, position)
