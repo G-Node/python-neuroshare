@@ -13,3 +13,6 @@ dist/
 
 doc/build/*
 *.egg
+
+#data files
+*.mcd
