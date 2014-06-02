@@ -1,3 +1,13 @@
+python-neuroshare (0.9.2-1) unstable; urgency=medium
+
+  * New upstream release (0.9.2)
+  * debian/patches:
+    - Update sphinx-pipy-upload patch
+  * debian/copyright:
+    - Include license for docs theme (Closes: #747869)
+
+ -- Christian Kellner <ck@xatom.net>  Mon, 02 Jun 2014 18:21:59 +0200
+
 python-neuroshare (0.9.1-2) unstable; urgency=low
 
   * debian/watch:
