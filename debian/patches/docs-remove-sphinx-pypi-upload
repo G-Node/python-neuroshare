@@ -1,13 +1,14 @@
 Description: Remove setup dep. on Sphinx-PyPI-upload  
 Author: Christian Kellner <ck@xatom.net>
 
---- python-neuroshare-0.9.orig/setup.py
-+++ python-neuroshare-0.9/setup.py
-@@ -61,6 +61,5 @@ setup (name             = 'neuroshare',
-        classifiers      = classifiers,
+Index: python-neuroshare/setup.py
+===================================================================
+--- python-neuroshare.orig/setup.py
++++ python-neuroshare/setup.py
+@@ -62,5 +62,5 @@ setup (name             = 'neuroshare',
         ext_modules      = [native_ext],
         packages         = ['neuroshare'],
--       scripts          = ['ns-convert'],
--       setup_requires   = ['Sphinx-PyPI-upload']
-+       scripts          = ['ns-convert']
+        scripts          = ['ns-convert'],
+-       setup_requires   = ['Sphinx-PyPI-upload', 'numpy >= 1.7']
++       setup_requires   = ['numpy >= 1.7']
         )
