@@ -1,4 +1,4 @@
-from Entity import *
+from Entity import Entity
 
 
 class SegmentSource(object):
