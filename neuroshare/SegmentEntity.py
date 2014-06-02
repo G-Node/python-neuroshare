@@ -1,8 +1,9 @@
-from Entity import *
+from Entity import Entity
+
 
 class SegmentSource(object):
-    """Segement sources provide access to the metadata of individual sources
-    of a :class:`SegementEntity`"""
+    """Segment sources provide access to the metadata of individual sources
+    of a :class:`SegmentEntity`"""
     def __init__(self, segment, source_id, info):
         self._segment = segment
         self._source_id = source_id
@@ -53,7 +54,7 @@ class SegmentSource(object):
 
     @property
     def location_user(self):
-        """Additinal hardware specific location information"""
+        """Additional hardware specific location information"""
         return self._info['LocationUser']
 
     @property
@@ -92,12 +93,12 @@ class SourcesBag(object):
         self._segment = segment
 
     def __getitem__(self, key):
-        source_id = int (key)
+        source_id = int(key)
         source_info = self._infos[source_id]
-        return SegmentSource (self._segment, source_id, source_info)
+        return SegmentSource(self._segment, source_id, source_info)
 
     def __iter__(self):
-        for x in range(0, len (self._infos)):
+        for x in range(0, len(self._infos)):
             yield self[x]
 
 
@@ -110,7 +111,7 @@ class SegmentEntity(Entity):
         self._source_infos = info['SourceInfos']
         pure_info = copy(info)
         del pure_info['SourceInfos']
-        super(SegmentEntity,self).__init__(eid, nsfile, pure_info)
+        super(SegmentEntity, self).__init__(eid, nsfile, pure_info)
 
     @property
     def max_sample_count(self):
@@ -119,7 +120,7 @@ class SegmentEntity(Entity):
 
     @property
     def source_count(self):
-        """Number of sources for this segement entity."""
+        """Number of sources for this segment entity."""
         return self._info['SourceCount']
 
     @property
@@ -127,15 +128,13 @@ class SegmentEntity(Entity):
         """Property that provides access to the metadata of the individual
         sources of this entity.
 
-        Returns a sequenze of objects of type :class:`SegmentSource`.
-        Metadata properties of a SegementSource are analogous to the
+        Returns a sequence of objects of type :class:`SegmentSource`.
+        Metadata properties of a SegmentSource are analogous to the
         :class:`AnalogEntity`."""
         return SourcesBag(self, self._source_infos)
 
-    def get_data (self, index):
+    def get_data(self, index):
         """Retrieve the data at ``index``"""
         lib = self.file.library
-        data = lib._get_segment_data (self, index)
+        data = lib._get_segment_data(self, index)
         return data
-
-

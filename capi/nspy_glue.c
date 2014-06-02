@@ -20,6 +20,10 @@
  */
 
 #include <Python.h>
+
+//we want only fresh stuff
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+
 #include <numpy/arrayobject.h>
 #include <numpy/ndarrayobject.h>
 
@@ -737,10 +741,10 @@ get_times_for_entity (NsLibrary *lib,
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
 
-  data = (double *) PyArray_DATA (array);
+  data = (double *) PyArray_DATA ((PyArrayObject *) array);
 
   for (i = 0; i < length; i++)
     {
@@ -966,10 +970,10 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
   
-  buffer = PyArray_DATA (array);
+  buffer = PyArray_DATA ((PyArrayObject *) array);
 
   res = lib->GetAnalogData (file_id,
 			    entity_id,
@@ -1060,8 +1064,8 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       0,
 		       NULL);
   
-  buffer = (double *) PyArray_DATA (array);
-  buffer_size = (uint32) PyArray_NBYTES (array);
+  buffer = (double *) PyArray_DATA ((PyArrayObject *) array);
+  buffer_size = (uint32) PyArray_NBYTES ((PyArrayObject *) array);
 
   res = lib->GetSegmentData (file_id,
 			     entity_id,
@@ -1131,10 +1135,10 @@ do_get_neural_data (PyObject *self, PyObject *args, PyObject *kwds)
 		       NULL,
 		       NULL /* data */,
 		       0 /* itemsize */,
-		       NPY_CARRAY,
+		       NPY_ARRAY_CARRAY,
 		       NULL);
   
-  buffer = PyArray_DATA (array);
+  buffer = PyArray_DATA ((PyArrayObject *) array);
 
   res = lib->GetNeuralData (file_id,
 			    entity_id,
@@ -1246,27 +1250,27 @@ static PyMethodDef NativeMethods[] = {
   {"library_close",  (PyCFunction) library_close, METH_VARARGS | METH_KEYWORDS,
    "Close an open Neuroshare Library"},
 
-  {"_get_library_info",  (PyCFunction) do_get_library_info, METH_VARARGS | METH_KEYWORDS,
+  {"get_library_info",  (PyCFunction) do_get_library_info, METH_VARARGS | METH_KEYWORDS,
    "Retrieves information about the loaded API library"},
-  {"_open_file",  (PyCFunction) do_open_file, METH_VARARGS | METH_KEYWORDS,
+  {"open_file",  (PyCFunction) do_open_file, METH_VARARGS | METH_KEYWORDS,
    "Opens the data file and returns its file info."},
-  {"_close_file",  (PyCFunction) do_close_file, METH_VARARGS | METH_KEYWORDS,
+  {"close_file",  (PyCFunction) do_close_file, METH_VARARGS | METH_KEYWORDS,
    "Close the open data file"},
-  {"_get_entity_info",  (PyCFunction) do_get_entity_info, METH_VARARGS | METH_KEYWORDS,
+  {"get_entity_info",  (PyCFunction) do_get_entity_info, METH_VARARGS | METH_KEYWORDS,
    "Retrieve Entity (general and specific) information"},
 
-  {"_get_event_data",  (PyCFunction) do_get_event_data, METH_VARARGS | METH_KEYWORDS,
+  {"get_event_data",  (PyCFunction) do_get_event_data, METH_VARARGS | METH_KEYWORDS,
    "Retrieve event data"},
-  {"_get_analog_data",  (PyCFunction) do_get_analog_data, METH_VARARGS | METH_KEYWORDS,
+  {"get_analog_data",  (PyCFunction) do_get_analog_data, METH_VARARGS | METH_KEYWORDS,
    "Retrieve analog data"},
-  {"_get_segment_data",  (PyCFunction) do_get_segment_data, METH_VARARGS | METH_KEYWORDS,
+  {"get_segment_data",  (PyCFunction) do_get_segment_data, METH_VARARGS | METH_KEYWORDS,
    "Retrieve segment data"},
-  {"_get_neural_data",  (PyCFunction) do_get_neural_data, METH_VARARGS | METH_KEYWORDS,
+  {"get_neural_data",  (PyCFunction) do_get_neural_data, METH_VARARGS | METH_KEYWORDS,
    "Retrieve analog data"},
 
-  {"_get_time_by_index",  (PyCFunction) do_get_time_by_index, METH_VARARGS | METH_KEYWORDS,
+  {"get_time_by_index",  (PyCFunction) do_get_time_by_index, METH_VARARGS | METH_KEYWORDS,
    "Timestamp of the index"},
-  {"_get_index_by_time",  (PyCFunction) do_get_index_by_time, METH_VARARGS | METH_KEYWORDS,
+  {"get_index_by_time",  (PyCFunction) do_get_index_by_time, METH_VARARGS | METH_KEYWORDS,
    "Index by timepoint"},
 
 

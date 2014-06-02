@@ -1,24 +1,26 @@
 
-from Library import *
-from Entity import *
-from EventEntity import *
-from AnalogEntity import *
-from SegmentEntity import *
-from NeuralEntity import *
+from Library import Library
+from Entity import EntityType
+from EventEntity import EventEntity
+from AnalogEntity import AnalogEntity
+from SegmentEntity import SegmentEntity
+from NeuralEntity import NeuralEntity
+
 
 class EntityProxy(object):
     def __init__(self, nsfile):
         self._nsfile = nsfile
 
     def __getitem__(self, key):
-       return self._nsfile.get_entity(key)
+        return self._nsfile.get_entity(key)
 
     def __iter__(self):
-        for x in xrange (0, self._nsfile.entity_count):
+        for x in xrange(0, self._nsfile.entity_count):
             yield self[x]
 
     def __len__(self):
         return self._nsfile.entity_count
+
 
 class File(object):
     """Object that represents a datafile that can be open via neuroshare at
@@ -33,21 +35,21 @@ class File(object):
         self._handle = None
         self._filename = filename
         if not library:
-            library = load_library_for_file (filename)
+            library = Library.for_file(filename)
 
         self._lib = library
-        (handle, info) = self._lib._open_file (filename)
+        (handle, info) = self._lib._open_file(filename)
         self._handle = handle
         self._info = info
         self._eproxy = EntityProxy(self)
 
     def __del__(self):
-        self.close ()
+        self.close()
 
     def close(self):
         """Close the file."""
         if self._handle:
-            self._lib._close_file (self)
+            self._lib._close_file(self)
             self._handle = None
 
     @property
@@ -86,7 +88,7 @@ class File(object):
     @property
     def time_stamp_resolution(self):
         """Minimum resolution of timestamps [in seconds]"""
-        return self.info['TimeStampResolution']
+        return self._info['TimeStampResolution']
 
     @property
     def ctime(self):
@@ -104,13 +106,12 @@ class File(object):
         millisec = self._info['Time_MilliSec']
 
         msec = millisec * 1000
-        ct = datetime (year, month, day, hour, minute, sec, msec)
+        ct = datetime(year, month, day, hour, minute, sec, msec)
         return ct
-
 
     def get_entity(self, entity_id):
         """Open the entity at the given index."""
-        info = self._lib._get_entity_info (self, entity_id)
+        info = self._lib._get_entity_info(self, entity_id)
         entity_type = info['EntityType']
 
         if entity_type == EntityType.Event:
@@ -122,7 +123,7 @@ class File(object):
         elif entity_type == EntityType.Neural:
             entity = NeuralEntity(self, entity_id, info)
         else:
-            return None #should not happen, throw exception?
+            return None  # should not happen, throw exception?
 
         return entity
 
@@ -132,7 +133,7 @@ class File(object):
         if end == -1:
             end = self.entity_count
 
-        for x in xrange (start, end):
+        for x in xrange(start, end):
             yield self.get_entity(x)
 
     @property
@@ -148,5 +149,9 @@ class File(object):
     def _get_handle(self):
         return self._handle
 
+    @property
+    def handle(self):
+        return self._handle
+
     def __repr__(self):
-        return 'neuroshare.File(%r)' % (self._filename)
+        return 'neuroshare.File(%r)' % self._filename

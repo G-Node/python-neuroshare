@@ -1,5 +1,6 @@
 
-from Entity import *
+from Entity import Entity
+
 
 class EventEntity(Entity):
     """Event entities represent specific timepoints with associated data,
@@ -13,7 +14,7 @@ class EventEntity(Entity):
     EVENT_DWORD = 5
 
     def __init__(self, nsfile, eid, info):
-        super(EventEntity,self).__init__(eid, nsfile, info)
+        super(EventEntity, self).__init__(eid, nsfile, info)
 
     @property
     def event_type(self):
@@ -32,20 +33,19 @@ class EventEntity(Entity):
 
     @property
     def max_data_length(self):
-        """Maximum lenght of the data for the event [in bytes]"""
+        """Maximum length of the data for the event [in bytes]"""
         return self._info['MaxDataLength']
 
     @property
     def min_data_length(self):
-        """Minimum lenght of the data for the event [in bytes]"""
+        """Minimum length of the data for the event [in bytes]"""
         return self._info['MinDataLength']
 
-    def get_data (self, index):
+    def get_data(self, index):
         """Retrieve the data at ``index``. Returns a 2-tuple with the
         timestamp of the data at the first position (``[0]``) and the
         actual data a the second position (``[1]``)).
         Example use: ``timestamp, data = event.get_data(0)``"""
         lib = self.file.library
-        data = lib._get_event_data (self, index)
+        data = lib._get_event_data(self, index)
         return data
-

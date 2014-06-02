@@ -1,6 +1,6 @@
 
 __author__ = 'Christian Kellner'
-__version__ = '0.9.1'
+__version__ = '0.9.2'
 __contact__ = 'kellner@biologie.uni-muenchen.de'
 __license__ = 'LGPL'
 
@@ -12,4 +12,3 @@ from EventEntity import EventEntity
 from AnalogEntity import AnalogEntity
 from SegmentEntity import SegmentEntity
 from NeuralEntity import NeuralEntity
-

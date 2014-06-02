@@ -1,6 +1,7 @@
 
 from Entity import Entity
 
+
 class AnalogEntity(Entity):
     """:class:`Entity` that represents continuously sampled, i.e. digitized, analog data.
     Examples are waveforms recorded via an electrode (microelectrodes, EKG, EEG).
@@ -8,7 +9,7 @@ class AnalogEntity(Entity):
     .. note:: data may contain gaps (e.g. when no data is recorded between trails)
     """
     def __init__(self, nsfile, eid, info):
-        super(AnalogEntity,self).__init__(eid, nsfile, info)
+        super(AnalogEntity, self).__init__(eid, nsfile, info)
 
     @property
     def sample_rate(self):
@@ -62,7 +63,7 @@ class AnalogEntity(Entity):
 
     @property
     def high_freq_order(self):
-        """Order of the high frequncy filter"""
+        """Order of the high frequency filter"""
         return self._info['HighFreqOrder']
 
     @property
@@ -77,7 +78,7 @@ class AnalogEntity(Entity):
 
     @property
     def low_freq_order(self):
-        """Order of the high frequncy filter"""
+        """Order of the high frequency filter"""
         return self._info['LowFreqOrder']
 
     @property
@@ -90,12 +91,12 @@ class AnalogEntity(Entity):
         """Additional information"""
         return self._info['ProbeInfo']
 
-    def get_data (self, index=0, count=-1):
+    def get_data(self, index=0, count=-1):
         """Retrieve raw data from file starting at ``index`` up to ``count`` elements.
         If no parameters are given retrieves all available data.
 
         Returns a tuple with three elements containing the raw data ``[0]``, the timestamp
-        of each data point ``[1]`` and how many of the data values are continous ``[2]``.
+        of each data point ``[1]`` and how many of the data values are continuous ``[2]``.
         Example use: ``data, times, count = analog1.get_data()``
 
         Raw data and timestamp data are return as :class:`numpy.ndarray`.
@@ -104,5 +105,5 @@ class AnalogEntity(Entity):
             count = self.item_count
 
         lib = self.file.library
-        data = lib._get_analog_data (self, index, count)
+        data = lib._get_analog_data(self, index, count)
         return data

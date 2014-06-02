@@ -1,0 +1,3 @@
+ignore-paths:
+    - doc
+    - neuroshare/__init__.py
