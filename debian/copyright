@@ -39,7 +39,7 @@ License: LGPL-2.1
  version 2.1 can be found in the file `/usr/share/common-licenses/LGPL-2.1'.
 
 
-Files: doc/source/themes/*
+Files: doc/source/_themes/*
 Copyright: 2010, Armin Ronacher <armin.ronacher@active-4.com>
 License: BSD-3-clause
  Some rights reserved.
