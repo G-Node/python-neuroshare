@@ -1,10 +1,18 @@
 python-neuroshare (0.9.2-1) unstable; urgency=medium
 
+  [ Christian Kellner ]
   * New upstream release (0.9.2)
   * debian/patches:
     - Update sphinx-pipy-upload patch
   * debian/copyright:
     - Include license for docs theme (Closes: #747869)
+
+  [ Michael Hanke ]
+  * Bumped Standards version to 3.9.5; no changes necessary
+  * -doc package now adds symlink to /usr/share/doc/python-neuroshare
+    pointing to the documentation in HTML format
+  * Make debian/rules clean target remove *.egg files to make package build
+    more robust.
 
  -- Christian Kellner <ck@xatom.net>  Mon, 02 Jun 2014 18:21:59 +0200
 

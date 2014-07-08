@@ -4,7 +4,7 @@ Maintainer: G-Node Debian Team <debian-team@g-node.org>
 Uploaders: Christian Kellner <ck@xatom.net>, Michael Hanke <mih@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), python-all-dev, dh-python, python-numpy, python-h5py, python-setuptools, python-sphinx (>= 1.0.7+dfsg)
 X-Python-Version: >= 2.6
-Standards-Version: 3.9.3
+Standards-Version: 3.9.5
 Section: science
 Homepage: http://www.g-node.org/neuroshare-tools
 Vcs-Browser: http://github.com/G-Node/python-neuroshare

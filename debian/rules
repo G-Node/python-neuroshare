@@ -24,6 +24,7 @@ override_dh_clean:
 	rm -rf neuroshare.egg-info
 	rm -rf build/docs
 	rm -f neuroshare/_capi.so
+	rm -f *.egg
 
 override_dh_sphinxdoc-arch:
 	#noop 
