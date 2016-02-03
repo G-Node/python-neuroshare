@@ -3,11 +3,39 @@ language: python
 virtualenv:
   system_site_packages: true
 
+env:
+  global:
+    - CC=gcc-4.8
+    - CXX=g++-4.8
+
+matrix:
+  include:
+  - python: "2.7"
+    env: COVERALLS=1
+  - python: "3.2"
+    env: COVERALLS=0
+
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+      - python-dev
+
 
 install:
-- sudo apt-get install python-numpy python-dev
+- pip install numpy
+- pip install sphinx-pypi-upload
 
 script:
 - python setup.py install
 - cd $HOME
 - python -c "import neuroshare"
+
+after_success:
+- if [ $COVERALLS = 1 ]; then coveralls; fi;
+
+notifications: 
+  email: false
