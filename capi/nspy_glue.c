@@ -1311,12 +1311,14 @@ init_capi(void)
         NULL,                /* m_clear */
         NULL,                /* m_free */
     };
+    
     module = PyModule_Create(&moduledef);
+    return module;
   #else
     module = Py_InitModule ("neuroshare._capi", NativeMethods);
   #endif
   if (module == NULL)
-    return;
+    return NULL;
   
   PyModule_AddStringConstant (module,
 			      "__doc__",
@@ -1327,4 +1329,5 @@ init_capi(void)
   PgError = PyErr_NewException ("_capi.error", NULL, NULL);
   Py_INCREF (PgError);
   PyModule_AddObject (module, "error", PgError);
+  Py_RETURN_NONE;
 }
