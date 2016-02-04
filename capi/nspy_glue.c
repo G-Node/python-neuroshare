@@ -368,14 +368,26 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
       dl_unload_library (lib);
       return NULL;
     }
-
-  lib_handle = PyCObject_FromVoidPtr (lib, NULL);
+  #if PY_MAJOR_VERSION >= 3
+	lib_handle = PyCapsule_New (lib,"capi", NULL);
+  #else
+    lib_handle = PyCObject_FromVoidPtr (lib, NULL);
+  #endif
 
   return lib_handle;
 }
 
+/************* python3 function redefinition*********/ 
 #if PY_MAJOR_VERSION >= 3
 #define PyExc_StandardError PyExc_Exception
+#define PyCObject_Check(capsule) (PyCapsule_CheckExact(capsule))
+#define PyCObject_AsVoidPtr(capsule) (PyCapsule_GetPointer(capsule, "capi"))
+#define PyString_FromString(mystring) PyBytes_FromString(mystring)
+#define PyString_FromStringAndSize(buffer, data_ret_size) PyBytes_FromStringAndSize(buffer, data_ret_size)
+#define PyInt_AsUnsignedLongMask(integer) PyLong_AsUnsignedLongMask(integer)
+#define PyInt_FromLong(integer) PyLong_FromLong(integer)
+#define PyInt_Check(integer) PyLong_Check(integer)
+#define init_capi(void) PyInit__capi(void)
 #endif
 
 static PyObject *
@@ -900,7 +912,7 @@ do_get_event_data (PyObject *self, PyObject *args, PyObject *kwds)
   switch (event_type)
     {
     case ns_EVENT_TEXT:
-    case ns_EVENT_CSV:       
+    case ns_EVENT_CSV:
       data_obj = PyString_FromStringAndSize (buffer, data_ret_size);
       break;
       
@@ -1286,8 +1298,23 @@ PyMODINIT_FUNC
 init_capi(void)
 {
   PyObject *module;
-  
-  module = Py_InitModule ("neuroshare._capi", NativeMethods);
+/************* python3 module import*********/ 
+  #if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "themodulename",     /* m_name */
+        "This is a module",  /* m_doc */
+        -1,                  /* m_size */
+        NativeMethods,       /* m_methods */
+        NULL,                /* m_reload */
+        NULL,                /* m_traverse */
+        NULL,                /* m_clear */
+        NULL,                /* m_free */
+    };
+    module = PyModule_Create(&moduledef);
+  #else
+    module = Py_InitModule ("neuroshare._capi", NativeMethods);
+  #endif
   if (module == NULL)
     return;
   
