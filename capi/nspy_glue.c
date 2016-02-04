@@ -374,6 +374,10 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
   return lib_handle;
 }
 
+#if PY_MAJOR_VERSION >= 3
+#define PyExc_StandardError PyExc_Exception
+#endif
+
 static PyObject *
 library_close (PyObject *self, PyObject *args, PyObject *kwds)
 {
