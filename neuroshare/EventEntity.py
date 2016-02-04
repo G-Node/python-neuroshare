@@ -1,5 +1,5 @@
 
-from Entity import Entity
+from .Entity import Entity
 
 
 class EventEntity(Entity):

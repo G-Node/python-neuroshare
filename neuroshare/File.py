@@ -1,10 +1,10 @@
 
-from Library import Library
-from Entity import EntityType
-from EventEntity import EventEntity
-from AnalogEntity import AnalogEntity
-from SegmentEntity import SegmentEntity
-from NeuralEntity import NeuralEntity
+from .Library import Library
+from .Entity import EntityType
+from .EventEntity import EventEntity
+from .AnalogEntity import AnalogEntity
+from .SegmentEntity import SegmentEntity
+from .NeuralEntity import NeuralEntity
 
 
 class EntityProxy(object):

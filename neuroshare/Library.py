@@ -1,6 +1,6 @@
 import os
 import sys
-import _capi
+from . import _capi
 
 
 class ArgumentError(Exception):
