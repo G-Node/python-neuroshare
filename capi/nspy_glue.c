@@ -556,7 +556,7 @@ do_close_file (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
   
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj)) 
+  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj))
     {
       PyErr_SetString (PyExc_TypeError, "Wrong argument type(s)");
       return NULL;
@@ -1294,40 +1294,52 @@ static PyMethodDef NativeMethods[] = {
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
-PyMODINIT_FUNC
-init_capi(void)
-{
-  PyObject *module;
-/************* python3 module import*********/ 
-  #if PY_MAJOR_VERSION >= 3
-  static struct PyModuleDef moduledef = {
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
         PyModuleDef_HEAD_INIT,
-        "themodulename",     /* m_name */
-        "This is a module",  /* m_doc */
+        "neuroshare._capi",     /* m_name */
+        "neuroshare native (C) functions",  /* m_doc */
         -1,                  /* m_size */
         NativeMethods,       /* m_methods */
         NULL,                /* m_reload */
         NULL,                /* m_traverse */
         NULL,                /* m_clear */
         NULL,                /* m_free */
-    };
-    
-    module = PyModule_Create(&moduledef);
-    return module;
-  #else
-    module = Py_InitModule ("neuroshare._capi", NativeMethods);
-  #endif
+};
+#define INIT_RETURN_ERROR NULL
+#else
+#define INIT_RETURN_ERROR
+#endif
+
+
+PyMODINIT_FUNC
+init_capi(void)
+{
+  PyObject *module;
+
+#if PY_MAJOR_VERSION >= 3
+  module = PyModule_Create (&moduledef);
+#else
+  module = Py_InitModule ("neuroshare._capi", NativeMethods);
+#endif
+
+
   if (module == NULL)
-    return NULL;
-  
+    return INIT_RETURN_ERROR;
+
+  import_array ();
+
+#if PY_MAJOR_VERSION < 3
   PyModule_AddStringConstant (module,
 			      "__doc__",
 			      "neuroshare native (C) functions");
-  
-  import_array ();
-  
+#endif
+
   PgError = PyErr_NewException ("_capi.error", NULL, NULL);
   Py_INCREF (PgError);
   PyModule_AddObject (module, "error", PgError);
-  Py_RETURN_NONE;
+
+#if PY_MAJOR_VERSION >= 3
+  return module;
+#endif
 }
