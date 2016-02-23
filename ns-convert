@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import os
 import sys
@@ -74,7 +75,7 @@ class Converter(object):
         dtype = self.dtype_by_event(event)
         nitems = event.item_count
         data = np.empty([nitems], dtype)
-        for n in xrange(0, event.item_count):
+        for n in range(0, event.item_count):
             data[n] = event.get_data(n)
 
         group = self.get_group_for_type(event.entity_type)
@@ -96,12 +97,12 @@ class Converter(object):
         seg_group = group.create_group(segment.label)
         self.copy_metadata(seg_group, segment.metadata_raw)
 
-        for index in xrange(0, segment.source_count):
+        for index in range(0, segment.source_count):
             source = segment.sources[index]
             name = 'SourceInfo.%d.' % index
             self.copy_metadata(seg_group, source.metadata_raw, prefix=name)
 
-        for index in xrange(0, segment.item_count):
+        for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
             dset = seg_group.create_dataset(name, data=data.T)
@@ -118,7 +119,7 @@ class Converter(object):
 
     @classmethod
     def copy_metadata(cls, target, metadata, prefix=None):
-        for (key, value) in metadata.iteritems():
+        for (key, value) in metadata.items():
             if prefix is not None:
                 key = prefix + key
             target.attrs[key] = value
@@ -167,7 +168,7 @@ def main():
             output = arg
 
     if len(rem) != 1:
-        print "Wrong number of arguments"
+        print("Wrong number of arguments")
         return -1
 
     filename = rem[0]
