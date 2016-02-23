@@ -745,7 +745,7 @@ get_times_for_entity (NsLibrary *lib,
   ns_RESULT  res;
   npy_intp   dims[1];
   double    *data;
-  int        i;
+  uint32     i;
 
   res = ns_OK;
   dims[0] = length;
