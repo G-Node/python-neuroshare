@@ -413,6 +413,10 @@ library_close (PyObject *self, PyObject *args, PyObject *kwds)
 
   res = dl_unload_library (lib);
 
+#if PY_MAJOR_VERSION >= 3
+    Py_DECREF(cobj);
+#endif
+
   if (res != 0)
     return NULL;
 
