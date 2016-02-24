@@ -368,11 +368,27 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
       dl_unload_library (lib);
       return NULL;
     }
-
-  lib_handle = PyCObject_FromVoidPtr (lib, NULL);
+  #if PY_MAJOR_VERSION >= 3
+	lib_handle = PyCapsule_New (lib,"capi", NULL);
+  #else
+    lib_handle = PyCObject_FromVoidPtr (lib, NULL);
+  #endif
 
   return lib_handle;
 }
+
+/************* python3 function redefinition*********/ 
+#if PY_MAJOR_VERSION >= 3
+#define PyExc_StandardError PyExc_Exception
+#define PyCObject_Check(capsule) (PyCapsule_CheckExact(capsule))
+#define PyCObject_AsVoidPtr(capsule) (PyCapsule_GetPointer(capsule, "capi"))
+#define PyString_FromString(mystring) PyBytes_FromString(mystring)
+#define PyString_FromStringAndSize(buffer, data_ret_size) PyBytes_FromStringAndSize(buffer, data_ret_size)
+#define PyInt_AsUnsignedLongMask(integer) PyLong_AsUnsignedLongMask(integer)
+#define PyInt_FromLong(integer) PyLong_FromLong(integer)
+#define PyInt_Check(integer) PyLong_Check(integer)
+#define init_capi(void) PyInit__capi(void)
+#endif
 
 static PyObject *
 library_close (PyObject *self, PyObject *args, PyObject *kwds)
@@ -540,7 +556,7 @@ do_close_file (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
   
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj)) 
+  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj))
     {
       PyErr_SetString (PyExc_TypeError, "Wrong argument type(s)");
       return NULL;
@@ -729,7 +745,7 @@ get_times_for_entity (NsLibrary *lib,
   ns_RESULT  res;
   npy_intp   dims[1];
   double    *data;
-  int        i;
+  uint32     i;
 
   res = ns_OK;
   dims[0] = length;
@@ -896,7 +912,7 @@ do_get_event_data (PyObject *self, PyObject *args, PyObject *kwds)
   switch (event_type)
     {
     case ns_EVENT_TEXT:
-    case ns_EVENT_CSV:       
+    case ns_EVENT_CSV:
       data_obj = PyString_FromStringAndSize (buffer, data_ret_size);
       break;
       
@@ -1278,22 +1294,52 @@ static PyMethodDef NativeMethods[] = {
   {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+        PyModuleDef_HEAD_INIT,
+        "neuroshare._capi",     /* m_name */
+        "neuroshare native (C) functions",  /* m_doc */
+        -1,                  /* m_size */
+        NativeMethods,       /* m_methods */
+        NULL,                /* m_reload */
+        NULL,                /* m_traverse */
+        NULL,                /* m_clear */
+        NULL,                /* m_free */
+};
+#define INIT_RETURN_ERROR NULL
+#else
+#define INIT_RETURN_ERROR
+#endif
+
+
 PyMODINIT_FUNC
 init_capi(void)
 {
   PyObject *module;
-  
+
+#if PY_MAJOR_VERSION >= 3
+  module = PyModule_Create (&moduledef);
+#else
   module = Py_InitModule ("neuroshare._capi", NativeMethods);
+#endif
+
+
   if (module == NULL)
-    return;
-  
+    return INIT_RETURN_ERROR;
+
+  import_array ();
+
+#if PY_MAJOR_VERSION < 3
   PyModule_AddStringConstant (module,
 			      "__doc__",
 			      "neuroshare native (C) functions");
-  
-  import_array ();
-  
+#endif
+
   PgError = PyErr_NewException ("_capi.error", NULL, NULL);
   Py_INCREF (PgError);
   PyModule_AddObject (module, "error", PgError);
+
+#if PY_MAJOR_VERSION >= 3
+  return module;
+#endif
 }

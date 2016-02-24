@@ -1,10 +1,10 @@
 
-from Library import Library
-from Entity import EntityType
-from EventEntity import EventEntity
-from AnalogEntity import AnalogEntity
-from SegmentEntity import SegmentEntity
-from NeuralEntity import NeuralEntity
+from .Library import Library
+from .Entity import EntityType
+from .EventEntity import EventEntity
+from .AnalogEntity import AnalogEntity
+from .SegmentEntity import SegmentEntity
+from .NeuralEntity import NeuralEntity
 
 
 class EntityProxy(object):
@@ -15,7 +15,7 @@ class EntityProxy(object):
         return self._nsfile.get_entity(key)
 
     def __iter__(self):
-        for x in xrange(0, self._nsfile.entity_count):
+        for x in range(0, self._nsfile.entity_count):
             yield self[x]
 
     def __len__(self):
@@ -133,7 +133,7 @@ class File(object):
         if end == -1:
             end = self.entity_count
 
-        for x in xrange(start, end):
+        for x in range(start, end):
             yield self.get_entity(x)
 
     @property
