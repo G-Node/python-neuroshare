@@ -379,8 +379,8 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
 
 /************* python3 function redefinition*********/ 
 #if PY_MAJOR_VERSION >= 3
-#define PyString_FromString(mystring) PyBytes_FromString(mystring)
-#define PyString_FromStringAndSize(buffer, data_ret_size) PyBytes_FromStringAndSize(buffer, data_ret_size)
+#define PyString_FromString(mystring) PyUnicode_FromString(mystring)
+#define PyString_FromStringAndSize(buffer, data_ret_size) PyUnicode_FromStringAndSize(buffer, data_ret_size)
 #define PyInt_AsUnsignedLongMask(integer) PyLong_AsUnsignedLongMask(integer)
 #define PyInt_FromLong(integer) PyLong_FromLong(integer)
 #define PyInt_Check(integer) PyLong_Check(integer)
