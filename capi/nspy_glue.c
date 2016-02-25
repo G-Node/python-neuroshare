@@ -83,18 +83,19 @@ uint8_from_data (void *data, size_t data_len)
   
   if (data_len == 1)
     {
-      uint8 *u8 = data;
-      ret = *u8;
+      memcpy (&ret, data, 1);
     }
   else if (data_len == 2)
     {
-      ret = *(uint8 *) data;
+      uint16 u16;
+      memcpy (&u16, data, 2);
+      ret = (uint8) u16;
     }
   else if (data_len == 4)
     {
-      uint32 *u32;
-      u32 = (uint32 *) data;
-      ret =  (uint8) *u32;
+      uint32 u32;
+      memcpy (&u32, data, 4);
+      ret = (uint8) u32;
     }
   else
     {
@@ -111,18 +112,19 @@ uint16_from_data (void *data, size_t data_len)
   
   if (data_len == 1)
     {
-      uint8 *u8 = data;
-      ret = (uint16) *u8;
+      uint8 u8;
+      memcpy (&u8, data, 1);
+      ret = (uint16) u8;
     }
   else if (data_len == 2)
     {
-      ret = *(uint16 *) data;
+      memcpy (&ret, data, 2);
     }
   else if (data_len == 4)
     {
-      uint32 *u32;
-      u32 = (uint32 *) data;
-      ret =  (uint16) *u32;
+      uint32 u32;
+      memcpy (&u32, data, 4);
+      ret =  (uint16) u32;
     }
   else
     {
@@ -139,18 +141,19 @@ uint32_from_data (void *data, size_t data_len)
   
   if (data_len == 1)
     {
-      uint8 *u8 = data;
-      ret = (uint32) *u8;
+      uint8 u8;
+      memcpy (&u8, data, 1);
+      ret = (uint32) u8;
     }
   else if (data_len == 2)
     {
-      uint16 *u16;
-      u16 = (uint16 *) data;
-      ret =  (uint32) *u16;
+      uint16 u16;
+      memcpy (&u16, data, 2);
+      ret =  (uint32) u16;
     }
   else if (data_len == 4)
     {
-      ret = *(uint32 *) data;
+      memcpy (&ret, data, 4);
     }
   else
     {
