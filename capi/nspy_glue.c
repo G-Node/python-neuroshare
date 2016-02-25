@@ -371,19 +371,14 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
       dl_unload_library (lib);
       return NULL;
     }
-  #if PY_MAJOR_VERSION >= 3
-	lib_handle = PyCapsule_New (lib,"capi", NULL);
-  #else
-    lib_handle = PyCObject_FromVoidPtr (lib, NULL);
-  #endif
+
+  lib_handle = PyCapsule_New (lib, "capi", NULL);
 
   return lib_handle;
 }
 
 /************* python3 function redefinition*********/ 
 #if PY_MAJOR_VERSION >= 3
-#define PyCObject_Check(capsule) (PyCapsule_CheckExact(capsule))
-#define PyCObject_AsVoidPtr(capsule) (PyCapsule_GetPointer(capsule, "capi"))
 #define PyString_FromString(mystring) PyBytes_FromString(mystring)
 #define PyString_FromStringAndSize(buffer, data_ret_size) PyBytes_FromStringAndSize(buffer, data_ret_size)
 #define PyInt_AsUnsignedLongMask(integer) PyLong_AsUnsignedLongMask(integer)
@@ -403,19 +398,17 @@ library_close (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
 
-  if (!PyCObject_Check (cobj))
+  if (!PyCapsule_CheckExact (cobj))
     {
       PyErr_SetString (PyExc_TypeError, "Expected NsLibrary type");
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
 
   res = dl_unload_library (lib);
 
-#if PY_MAJOR_VERSION >= 3
-    Py_DECREF(cobj);
-#endif
+  Py_DECREF(cobj);
 
   if (res != 0)
     return NULL;
@@ -436,13 +429,13 @@ do_get_library_info (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
   
-  if (!PyCObject_Check (cobj))
+  if (!PyCapsule_CheckExact (cobj))
     {
       PyErr_SetString (PyExc_TypeError, "Expected NsLibrary type");
       return NULL;
     }
   
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   res = lib->GetLibraryInfo (&info, sizeof (info));
 
   if (check_result_is_error (res, lib))
@@ -512,13 +505,13 @@ do_open_file (PyObject *self, PyObject *args, PyObject *kwds)
   if (!PyArg_ParseTuple (args, "Os", &cobj, &filename))
     return NULL;
   
-  if (!PyCObject_Check (cobj)) 
+  if (!PyCapsule_CheckExact (cobj)) 
     {
       PyErr_SetString (PyExc_TypeError, "Expected NsLibrary type");
       return NULL;
     }
   
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
 
   res = lib->OpenFile (filename, &file_id);
 
@@ -553,13 +546,13 @@ do_close_file (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
   
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj))
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj))
     {
       PyErr_SetString (PyExc_TypeError, "Wrong argument type(s)");
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
 
   res = lib->CloseFile (file_id);
@@ -797,14 +790,14 @@ do_get_entity_info (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
   
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj)) 
     {
       PyErr_SetString (PyExc_TypeError, "Wrong argument type(s)");
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
 
@@ -869,7 +862,7 @@ do_get_event_data (PyObject *self, PyObject *args, PyObject *kwds)
   if (!PyArg_ParseTuple (args, "OOOOOO", &cobj, &iobj, &id_obj, &idx_obj, &tp_obj, &sz_obj))
     return NULL;
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
       !PyInt_Check (tp_obj) || !PyInt_Check (sz_obj))
     {
@@ -877,7 +870,7 @@ do_get_event_data (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
   
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   index = (uint32) PyInt_AsUnsignedLongMask (idx_obj);
@@ -951,7 +944,7 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
   if (!PyArg_ParseTuple (args, "OOOOO", &cobj, &iobj, &id_obj, &idx_obj, &sz_obj))
     return NULL;
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
       !PyInt_Check (sz_obj))
     {
@@ -959,7 +952,7 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   index = (uint32) PyInt_AsUnsignedLongMask (idx_obj);
@@ -1038,7 +1031,7 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
       !PyInt_Check (sz_obj) || !PyInt_Check (src_obj))
     {
@@ -1046,7 +1039,7 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   index = (uint32) PyInt_AsUnsignedLongMask (idx_obj);
@@ -1113,7 +1106,7 @@ do_get_neural_data (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
       !PyInt_Check (sz_obj))
     {
@@ -1121,7 +1114,7 @@ do_get_neural_data (PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   index = (uint32) PyInt_AsUnsignedLongMask (idx_obj);
@@ -1174,7 +1167,7 @@ do_get_index_by_time(PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyFloat_Check (tp_obj) ||
       !PyInt_Check (fl_obj))
     {
@@ -1182,7 +1175,7 @@ do_get_index_by_time(PyObject *self, PyObject *args, PyObject *kwds)
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   timepoint = PyFloat_AsDouble (tp_obj);
@@ -1216,14 +1209,14 @@ do_get_time_by_index (PyObject *self, PyObject *args, PyObject *kwds)
     return NULL;
 
 
-  if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
+  if (!PyCapsule_CheckExact (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj))
     {
       PyErr_SetString (PyExc_TypeError, "Wrong argument type(s)");
       return NULL;
     }
 
-  lib = PyCObject_AsVoidPtr (cobj);
+  lib = PyCapsule_GetPointer (cobj, "capi");
   file_id = (uint32) PyInt_AsUnsignedLongMask (iobj);
   entity_id = (uint32) PyInt_AsUnsignedLongMask (id_obj);
   index = (uint32) PyInt_AsUnsignedLongMask (idx_obj);
