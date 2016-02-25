@@ -135,7 +135,7 @@ uint16_from_data (void *data, size_t data_len)
 static uint32
 uint32_from_data (void *data, size_t data_len)
 {
-  uint16 ret;
+  uint32 ret;
   
   if (data_len == 1)
     {
