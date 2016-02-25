@@ -382,7 +382,6 @@ library_open (PyObject *self, PyObject *args, PyObject *kwds)
 
 /************* python3 function redefinition*********/ 
 #if PY_MAJOR_VERSION >= 3
-#define PyExc_StandardError PyExc_Exception
 #define PyCObject_Check(capsule) (PyCapsule_CheckExact(capsule))
 #define PyCObject_AsVoidPtr(capsule) (PyCapsule_GetPointer(capsule, "capi"))
 #define PyString_FromString(mystring) PyBytes_FromString(mystring)
@@ -401,10 +400,8 @@ library_close (PyObject *self, PyObject *args, PyObject *kwds)
   int        res;
 
   if (!PyArg_ParseTuple (args, "O", &cobj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
 
   if (!PyCObject_Check (cobj))
     {
@@ -436,10 +433,8 @@ do_get_library_info (PyObject *self, PyObject *args, PyObject *kwds)
   ns_RESULT       res;
 
   if (!PyArg_ParseTuple (args, "O", &cobj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
   
   if (!PyCObject_Check (cobj))
     {
@@ -515,10 +510,7 @@ do_open_file (PyObject *self, PyObject *args, PyObject *kwds)
   uint32          file_id;
 
   if (!PyArg_ParseTuple (args, "Os", &cobj, &filename))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
   
   if (!PyCObject_Check (cobj)) 
     {
@@ -558,10 +550,8 @@ do_close_file (PyObject *self, PyObject *args, PyObject *kwds)
   uint32          file_id;
 
   if (!PyArg_ParseTuple (args, "OO", &cobj, &iobj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
   
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj))
     {
@@ -804,10 +794,8 @@ do_get_entity_info (PyObject *self, PyObject *args, PyObject *kwds)
   uint32          entity_id;
 
   if (!PyArg_ParseTuple (args, "OOO", &cobj, &iobj, &id_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
   
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj)) 
@@ -879,11 +867,8 @@ do_get_event_data (PyObject *self, PyObject *args, PyObject *kwds)
 
 
   if (!PyArg_ParseTuple (args, "OOOOOO", &cobj, &iobj, &id_obj, &idx_obj, &tp_obj, &sz_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
-  
+    return NULL;
+
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
       !PyInt_Check (tp_obj) || !PyInt_Check (sz_obj))
@@ -964,10 +949,7 @@ do_get_analog_data (PyObject *self, PyObject *args, PyObject *kwds)
   npy_intp        dims[1];
 
   if (!PyArg_ParseTuple (args, "OOOOO", &cobj, &iobj, &id_obj, &idx_obj, &sz_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
 
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
@@ -1053,10 +1035,8 @@ do_get_segment_data (PyObject *self, PyObject *args, PyObject *kwds)
   double          time_stamp;
 
   if (!PyArg_ParseTuple (args, "OOOOOO", &cobj, &iobj, &id_obj, &idx_obj, &src_obj, &sz_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
 
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
@@ -1130,10 +1110,8 @@ do_get_neural_data (PyObject *self, PyObject *args, PyObject *kwds)
   npy_intp        dims[1];
 
   if (!PyArg_ParseTuple (args, "OOOOO", &cobj, &iobj, &id_obj, &idx_obj, &sz_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
 
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj) ||
@@ -1193,10 +1171,8 @@ do_get_index_by_time(PyObject *self, PyObject *args, PyObject *kwds)
 
 
   if (!PyArg_ParseTuple (args, "OOOOO", &cobj, &iobj, &id_obj, &tp_obj, &fl_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
 
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyFloat_Check (tp_obj) ||
@@ -1237,10 +1213,8 @@ do_get_time_by_index (PyObject *self, PyObject *args, PyObject *kwds)
   ns_RESULT       res;
 
   if (!PyArg_ParseTuple (args, "OOOO", &cobj, &iobj, &id_obj, &idx_obj))
-    {
-      PyErr_SetString (PyExc_StandardError, "Could not parse arguments");
-      return NULL;
-    }
+    return NULL;
+
 
   if (!PyCObject_Check (cobj) || !PyInt_Check (iobj) ||
       !PyInt_Check (id_obj) || !PyInt_Check (idx_obj))
