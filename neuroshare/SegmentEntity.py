@@ -134,7 +134,21 @@ class SegmentEntity(Entity):
         return SourcesBag(self, self._source_infos)
 
     def get_data(self, index):
-        """Retrieve the data at ``index``"""
+        """Retrieve the data at ``index``.
+
+        Returns:
+
+        data : numpy.ndarray
+            The Segment data.
+        timestamp : float
+            Time stamp of the Segment data.
+        sample_count : int
+            How many sample points were obtained.
+        unit_id : int
+            Classification of the unit. A bit field (32 bits) where bit `0`
+            indicates if the segment is noise or artifact data, bit `n`
+            in the range of 1..32 indicates the unit n was present.
+        """
         lib = self.file.library
         data = lib._get_segment_data(self, index)
         return data
