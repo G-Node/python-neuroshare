@@ -8,6 +8,7 @@
 *.so
 
 build/
+cbuild/
 dist/
 *.egg-info
 
@@ -16,3 +17,6 @@ doc/build/*
 
 #data files
 *.mcd
+
+#pycharm, intellij
+.idea/
