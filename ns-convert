@@ -5,10 +5,10 @@ import os
 import sys
 import neuroshare as ns
 import numpy as np
-import getopt
 import time
 import nix
 import h5py
+import argparse
 
 class ProgressIndicator(object):
     def __init__(self, offset=0):
@@ -291,23 +291,19 @@ class ConsoleIndicator(ProgressIndicator):
 
 def main():
     global Converter,H5Converter
-    opts, rem = getopt.getopt(sys.argv[1:], 'o:', ['output=',
-                                                   'version=',
-                                                   'plain-h5',
-                                                   ])
     output = None
-    for opt, arg in opts:
-        if opt in ("-o", "--output"):
-            output = arg
-        if opt in ("--plain-h5"):
-            print("plain-h5 conversion")
-            Converter = H5Converter
-
-    if len(rem) != 1:
-        print("Wrong number of arguments")
-        return -1
-
-    filename = rem[0]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-o","--output",type=str,help="name of the output file")
+    parser.add_argument("--plain-hdf5",action="store_true",help="For plain conversion to hdf5 format")
+    parser.add_argument("InputFile",type=str,help="File to be converted")
+    args = parser.parse_args()
+    
+    if args.output:
+        output = args.output
+    if args.plain_hdf5:
+        Converter = H5Converter
+    
+    filename = args.InputFile
     ci = ConsoleIndicator()
     converter = Converter(filename, output, progress=ci)
     start = time.time()
