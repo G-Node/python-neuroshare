@@ -110,7 +110,7 @@ class Converter(object):
         for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
-            dset = self._nixB.create_data_array(str(segment.id)+"_"+name, "nix.segment", dtype=np.double, data=data.T)
+            dset = self._nixB.create_data_array(str(segment.id)+"_"+name, "nix.segment", dtype=np.double, data=np.squeeze(data.T))
             stepSize = 1/segment.metadata_raw['SampleRate']
             dim = dset.append_sampled_dimension(stepSize)
             dim.unit = 's'
@@ -292,15 +292,15 @@ class ConsoleIndicator(ProgressIndicator):
 def main():
     global Converter,H5Converter
     output = None
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='Convert Neuroshare readable files to nix/hdf5 format')
     parser.add_argument("-o","--output",type=str,help="name of the output file")
-    parser.add_argument("--plain-hdf5",action="store_true",help="For plain conversion to hdf5 format")
+    parser.add_argument("--hdf5",action="store_true",help="For plain conversion to hdf5 format")
     parser.add_argument("InputFile",type=str,help="File to be converted")
     args = parser.parse_args()
     
     if args.output:
         output = args.output
-    if args.plain_hdf5:
+    if args.hdf5:
         Converter = H5Converter
     
     filename = args.InputFile
