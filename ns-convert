@@ -37,11 +37,14 @@ class Converter(object):
         nf = ns.File(filepath)
         nixF = nix.File.open(output,nix.FileMode.Overwrite)
         nixB = nixF.create_block("main_block","nix.session")
-
+        nixS = nixF.create_section("main_section","odml.recording")
+         
         self._nf = nf
         self._nixF = nixF
         self._nixB = nixB
+        self._nixS = nixS
         self._groups = {}
+        self._sections = {}
         self.convert_map = {1: self.convert_event,
                             2: self.convert_analog,
                             3: self.convert_segment,
@@ -62,11 +65,24 @@ class Converter(object):
             self._groups[entity_type] = group
 
         return self._groups[entity_type]
+        
+    def get_section_for_type(self, entity_type):
+        name_map = {1: 'events',
+                    2: 'analogs',
+                    3: 'segments',
+                    4: 'neurals'}
+
+        if entity_type not in self._sections:
+            name    = name_map[entity_type]
+            section = self._nixS.create_section(name,"odml.recording")
+            self._sections[entity_type] = section
+
+        return self._sections[entity_type]
 
     def convert(self):
         progress = self._progress
         progress.setup(len(self._nf.entities))
-        self.copy_metadata(self._nixF,self._nixB, self._nf.metadata_raw)
+        self.copy_metadata(self._nixS,self._nixB, self._nf.metadata_raw)
         for entity in self._nf.entities:
             conv = self.convert_map[entity.entity_type]
             conv(entity)
@@ -75,16 +91,23 @@ class Converter(object):
         self._nixF.close()
 
     def convert_event(self, event):
-        dtype = self.dtype_by_event(event)
         nitems = event.item_count
-        data = np.empty([nitems], dtype)
+        values = np.empty([nitems], np.double)
+        times  = np.empty([nitems], np.double)
         for n in range(0, event.item_count):
-            data[n] = event.get_data(n)
-
+            times[n]  = event.get_data(n)[0]
+            values[n] = event.get_data(n)[1]
+        #handle the cases with empty events
+        if len(times)<1 or len(times)<len(values):
+            return
         group = self.get_group_for_type(event.entity_type)
-        dset = self._nixB.create_data_array(event.label, "nix.event", data=data)
+        dset  = self._nixB.create_data_array(event.label, "nix.event", data=values)
+        dim   = dset.append_range_dimension(times)
+        dim.unit  = 's'
+        dim.label = 'time'
         group.data_arrays.append(dset)
-        self.copy_metadata(self._nixF,dset, event.metadata_raw)
+        section = self.get_section_for_type(event.entity_type)
+        self.copy_metadata(section,dset, event.metadata_raw)
 
     def convert_analog(self, analog):
         (data, times, ic) = analog.get_data()
@@ -94,18 +117,20 @@ class Converter(object):
         dim.unit = "s"
         dim.label = "time"
         group.data_arrays.append(dset)
-        self.copy_metadata(self._nixF,dset, analog.metadata_raw)
+        section = self.get_section_for_type(analog.entity_type)
+        self.copy_metadata(section,dset, analog.metadata_raw)
 
     def convert_segment(self, segment):
         if not segment.item_count:
             return
         seg_group = self.get_group_for_type(segment.entity_type)
-        self.copy_metadata(self._nixF,seg_group, segment.metadata_raw, prefix=str(segment.id)+"_")
-
+        section = self.get_section_for_type(segment.entity_type)
+        self.copy_metadata(section,seg_group, segment.metadata_raw, prefix=str(segment.id)+"_")
+        
         for index in range(0, segment.source_count):
-            source = segment.sources[index]
-            name = 'SourceInfo.%d.' % index
-            self.copy_metadata(self._nixF,seg_group, source.metadata_raw, prefix=str(segment.id)+"_"+name)
+            source  = segment.sources[index]
+            name    = 'SourceInfo.%d.' % index
+            self.copy_metadata(section,seg_group, source.metadata_raw, prefix=str(segment.id)+"_"+name)
 
         for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
@@ -116,7 +141,7 @@ class Converter(object):
             dim.unit = 's'
             dim.offset = timestamp
             dim.label = "time"
-            sec = self._nixF.create_section(str(segment.id)+"_"+name+"_metadata","odml.unit")
+            sec = section.create_section(str(segment.id)+"_"+name+"_metadata","odml.unit")
             sec.create_property('unitID',nix.Value(unit))
             dset.metadata = sec
             seg_group.data_arrays.append(dset)
@@ -127,35 +152,23 @@ class Converter(object):
         name = "%d - %s" % (neural.id, neural.label)
         dset = self._nixB.create_data_array(name, "nix.neural", dtype=np.double, data=data)
         group.data_arrays.append(dset)
-        self.copy_metadata(self._nixF,dset, neural.metadata_raw)
+        section = self.get_section_for_type(event.entity_type)
+        self.copy_metadata(section,dset, neural.metadata_raw)
 
     @classmethod
-    def copy_metadata(cls,mainFile, target, metadata, prefix=None):
+    def copy_metadata(cls,parentSection, target, metadata, prefix=None):
         try:
             name = target.name
         except:
             name = "File"
         if prefix is not None:
             name = prefix+name
-        sec = mainFile.create_section(name+' metadata','odml.recording')
+        sec = parentSection.create_section(name+' metadata','odml.recording')
         for (key, value) in metadata.items():
             if prefix is not None:
                 key = prefix + key
             sec.create_property(key,nix.Value(value))
         target.metadata = sec
-
-    @classmethod
-    def dtype_by_event(cls, event):
-        type_map = {ns.EventEntity.EVENT_TEXT  : 'a',
-                    ns.EventEntity.EVENT_CSV   : 'a',
-                    ns.EventEntity.EVENT_BYTE  : 'b',
-                    ns.EventEntity.EVENT_WORD  : 'h',
-                    ns.EventEntity.EVENT_DWORD : 'i'}
-        val_type = type_map[event.entity_type]
-        if val_type == 'a':
-            val_type += str(event.max_data_length)
-        return np.dtype([('timestamp', 'd'), ('value', val_type)])
-
 
 # CLASS DEFINITION FOR HDF5 CONVERSION
 class H5Converter(object):
