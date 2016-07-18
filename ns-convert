@@ -101,7 +101,7 @@ class Converter(object):
         if len(times)<1 or len(times)<len(values):
             return
         group = self.get_group_for_type(event.entity_type)
-        dset  = self._nixB.create_data_array(event.label, "nix.event", data=values)
+        dset  = self._nixB.create_data_array(event.label, "nix.event", dtype=nix.DataType.Double, data=values)
         dim   = dset.append_range_dimension(times)
         dim.unit  = 's'
         dim.label = 'time'
@@ -112,7 +112,7 @@ class Converter(object):
     def convert_analog(self, analog):
         (data, times, ic) = analog.get_data()
         group = self.get_group_for_type(analog.entity_type)
-        dset = self._nixB.create_data_array(analog.label, "nix.analog", dtype=np.double, data=data.T)
+        dset = self._nixB.create_data_array(analog.label, "nix.analog", dtype=nix.DataType.Double, data=data.T)
         dim = dset.append_range_dimension(times)
         dim.unit = "s"
         dim.label = "time"
@@ -135,7 +135,7 @@ class Converter(object):
         for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
-            dset = self._nixB.create_data_array(str(segment.id)+"_"+name, "nix.segment", dtype=np.double, data=np.squeeze(data.T))
+            dset = self._nixB.create_data_array(str(segment.id)+"_"+name, "nix.segment", dtype=nix.DataType.Double, data=np.squeeze(data.T))
             stepSize = 1/segment.metadata_raw['SampleRate']
             dim = dset.append_sampled_dimension(stepSize)
             dim.unit = 's'
@@ -150,7 +150,7 @@ class Converter(object):
         data = neural.get_data()
         group = self.get_group_for_type(neural.entity_type)
         name = "%d - %s" % (neural.id, neural.label)
-        dset = self._nixB.create_data_array(name, "nix.neural", dtype=np.double, data=data)
+        dset = self._nixB.create_data_array(name, "nix.neural", dtype=nix.DataType.Double, data=data)
         group.data_arrays.append(dset)
         section = self.get_section_for_type(event.entity_type)
         self.copy_metadata(section,dset, neural.metadata_raw)
