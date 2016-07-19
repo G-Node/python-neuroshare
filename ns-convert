@@ -82,7 +82,8 @@ class Converter(object):
     def convert(self):
         progress = self._progress
         progress.setup(len(self._nf.entities))
-        self.copy_metadata(self._nixS,self._nixB, self._nf.metadata_raw)
+        for (key, value) in self._nf.metadata_raw.items():            
+            self._nixS.create_property(key,nix.Value(value))
         for entity in self._nf.entities:
             conv = self.convert_map[entity.entity_type]
             conv(entity)
