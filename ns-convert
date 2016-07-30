@@ -103,6 +103,7 @@ class Converter(object):
             return
         group = self.get_group_for_type(event.entity_type)
         dset  = self._nixB.create_data_array(event.label, "nix.event", dtype=nix.DataType.Double, data=values)
+        dset.label = "timepoints"
         dim   = dset.append_range_dimension(times)
         dim.unit  = 's'
         dim.label = 'time'
@@ -114,6 +115,7 @@ class Converter(object):
         (data, times, ic) = analog.get_data()
         group = self.get_group_for_type(analog.entity_type)
         dset = self._nixB.create_data_array(analog.label, "nix.analog", dtype=nix.DataType.Double, data=data.T)
+        dset.label = "waveform"
         dim = dset.append_range_dimension(times)
         dim.unit = "s"
         dim.label = "time"
@@ -126,23 +128,28 @@ class Converter(object):
             return
         seg_group = self.get_group_for_type(segment.entity_type)
         section = self.get_section_for_type(segment.entity_type)
-        self.copy_metadata(section,seg_group, segment.metadata_raw, prefix=str(segment.id)+"_")
+        subSection = section.create_section(segment.label+"_metadata",'odml.recording')
+        for (key, value) in segment.metadata_raw.items():
+            subSection.create_property(key,nix.Value(value))        
         
         for index in range(0, segment.source_count):
             source  = segment.sources[index]
-            name    = 'SourceInfo.%d.' % index
-            self.copy_metadata(section,seg_group, source.metadata_raw, prefix=str(segment.id)+"_"+name)
+            name    = 'SourceInfo.%d' % index
+            sourceSection = subSection.create_section(name,"odml.recording")
+            for (key, value) in source.metadata_raw.items():
+                sourceSection.create_property(key,nix.Value(value))
 
         for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
-            dset = self._nixB.create_data_array(str(segment.id)+"_"+name, "nix.segment", dtype=nix.DataType.Double, data=np.squeeze(data.T))
+            dset = self._nixB.create_data_array(str(segment.label)+"_"+name, "nix.segment", dtype=nix.DataType.Double, data=np.squeeze(data.T))
+            dset.label = "cutout"
             stepSize = 1/segment.metadata_raw['SampleRate']
             dim = dset.append_sampled_dimension(stepSize)
             dim.unit = 's'
             dim.offset = timestamp
             dim.label = "time"
-            sec = section.create_section(str(segment.id)+"_"+name+"_metadata","odml.unit")
+            sec = subSection.create_section(str(segment.id)+"_"+name+"_metadata","odml.unit")
             sec.create_property('unitID',nix.Value(unit))
             dset.metadata = sec
             seg_group.data_arrays.append(dset)
@@ -152,6 +159,8 @@ class Converter(object):
         group = self.get_group_for_type(neural.entity_type)
         name = "%d - %s" % (neural.id, neural.label)
         dset = self._nixB.create_data_array(name, "nix.neural", dtype=nix.DataType.Double, data=data)
+        dim = dset.append_alias_range_dimension()
+        dim.label = "timestamps"
         group.data_arrays.append(dset)
         section = self.get_section_for_type(event.entity_type)
         self.copy_metadata(section,dset, neural.metadata_raw)
