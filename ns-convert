@@ -6,9 +6,12 @@ import sys
 import neuroshare as ns
 import numpy as np
 import time
-import nix
 import h5py
 import argparse
+try:
+    import nix
+except ImportError:
+    import nixio as nix
 
 class ProgressIndicator(object):
     def __init__(self, offset=0):
@@ -27,18 +30,14 @@ class ProgressIndicator(object):
     def progress(self, max_value, cur_value):
         pass
 
-#CLASS DEFINITION FOR NIX(Default) CONVERSION
+#CLASS DEFINITION FOR NIX-CONVERTER
 class Converter(object):
-    def __init__(self, filepath, output=None, progress=None):
-        if not output:
-            (basefile, ext) = os.path.splitext(filepath)
-            output = "%s.h5" % basefile
-
+    def __init__(self, filepath, output, progress=None):
         nf = ns.File(filepath)
-        nixF = nix.File.open(output,nix.FileMode.Overwrite)
-        nixB = nixF.create_block("main_block","nix.session")
-        nixS = nixF.create_section("main_section","odml.recording")
-         
+        nixF = nix.File.open(output, nix.FileMode.Overwrite)
+        nixB = nixF.create_block(filepath, "nix.session")
+        nixS = nixF.create_section(filepath, "odml.recording")
+
         self._nf = nf
         self._nixF = nixF
         self._nixB = nixB
@@ -65,7 +64,7 @@ class Converter(object):
             self._groups[entity_type] = group
 
         return self._groups[entity_type]
-        
+
     def get_section_for_type(self, entity_type):
         name_map = {1: 'events',
                     2: 'analogs',
@@ -73,7 +72,7 @@ class Converter(object):
                     4: 'neurals'}
 
         if entity_type not in self._sections:
-            name    = name_map[entity_type]
+            name = name_map[entity_type]
             section = self._nixS.create_section(name,"odml.recording")
             self._sections[entity_type] = section
 
@@ -82,30 +81,30 @@ class Converter(object):
     def convert(self):
         progress = self._progress
         progress.setup(len(self._nf.entities))
-        for (key, value) in self._nf.metadata_raw.items():            
-            self._nixS.create_property(key,nix.Value(value))
+        for (key, value) in self._nf.metadata_raw.items():
+            self._nixS.create_property(key, nix.Value(value))
         for entity in self._nf.entities:
             conv = self.convert_map[entity.entity_type]
             conv(entity)
             progress + 1
-            
+
         self._nixF.close()
 
     def convert_event(self, event):
         nitems = event.item_count
         values = np.empty([nitems], np.double)
-        times  = np.empty([nitems], np.double)
+        times = np.empty([nitems], np.double)
         for n in range(0, event.item_count):
-            times[n]  = event.get_data(n)[0]
+            times[n] = event.get_data(n)[0]
             values[n] = event.get_data(n)[1]
         #handle the cases with empty events
         if len(times)<1 or len(times)<len(values):
             return
         group = self.get_group_for_type(event.entity_type)
-        dset  = self._nixB.create_data_array(event.label, "nix.event", dtype=nix.DataType.Double, data=values)
+        dset = self._nixB.create_data_array(event.label, "nix.event", dtype=nix.DataType.Double, data=values)
         dset.label = "timepoints"
-        dim   = dset.append_range_dimension(times)
-        dim.unit  = 's'
+        dim = dset.append_range_dimension(times)
+        dim.unit = 's'
         dim.label = 'time'
         group.data_arrays.append(dset)
         section = self.get_section_for_type(event.entity_type)
@@ -115,6 +114,12 @@ class Converter(object):
         (data, times, ic) = analog.get_data()
         group = self.get_group_for_type(analog.entity_type)
         dset = self._nixB.create_data_array(analog.label, "nix.analog", dtype=nix.DataType.Double, data=data.T)
+        try:
+            dset.unit = analog.units
+        except:
+            if analog.units == "raw":
+                dset.unit = "V"
+            pass
         dset.label = "waveform"
         dim = dset.append_range_dimension(times)
         dim.unit = "s"
@@ -130,27 +135,33 @@ class Converter(object):
         section = self.get_section_for_type(segment.entity_type)
         subSection = section.create_section(segment.label+"_metadata",'odml.recording')
         for (key, value) in segment.metadata_raw.items():
-            subSection.create_property(key,nix.Value(value))        
-        
+            subSection.create_property(key, nix.Value(value))
+
         for index in range(0, segment.source_count):
-            source  = segment.sources[index]
-            name    = 'SourceInfo.%d' % index
+            source = segment.sources[index]
+            name = 'SourceInfo.%d' % index
             sourceSection = subSection.create_section(name,"odml.recording")
             for (key, value) in source.metadata_raw.items():
-                sourceSection.create_property(key,nix.Value(value))
+                sourceSection.create_property(key, nix.Value(value))
 
         for index in range(0, segment.item_count):
             (data, timestamp, samples, unit) = segment.get_data(index)
             name = '%d - %f' % (index, timestamp)
             dset = self._nixB.create_data_array(str(segment.label)+"_"+name, "nix.segment", dtype=nix.DataType.Double, data=np.squeeze(data.T))
-            dset.label = "cutout"
+            dset.label = "cutout waveform"
+            try:
+                dset.unit = segment.metadata_raw["Units"]
+            except:
+                if segment.metadata_raw["Units"] == "raw":
+                    dset.unit = "V"
+            pass
             stepSize = 1/segment.metadata_raw['SampleRate']
             dim = dset.append_sampled_dimension(stepSize)
             dim.unit = 's'
             dim.offset = timestamp
             dim.label = "time"
             sec = subSection.create_section(str(segment.id)+"_"+name+"_metadata","odml.unit")
-            sec.create_property('unitID',nix.Value(unit))
+            sec.create_property('unitID', nix.Value(unit))
             dset.metadata = sec
             seg_group.data_arrays.append(dset)
 
@@ -163,7 +174,7 @@ class Converter(object):
         dim.label = "timestamps"
         group.data_arrays.append(dset)
         section = self.get_section_for_type(event.entity_type)
-        self.copy_metadata(section,dset, neural.metadata_raw)
+        self.copy_metadata(section, dset, neural.metadata_raw)
 
     @classmethod
     def copy_metadata(cls,parentSection, target, metadata, prefix=None):
@@ -177,16 +188,12 @@ class Converter(object):
         for (key, value) in metadata.items():
             if prefix is not None:
                 key = prefix + key
-            sec.create_property(key,nix.Value(value))
+            sec.create_property(key, nix.Value(value))
         target.metadata = sec
 
-# CLASS DEFINITION FOR HDF5 CONVERSION
+# CLASS DEFINITION FOR HDF5-CONVERTER
 class H5Converter(object):
-    def __init__(self, filepath, output=None, progress=None):
-        if not output:
-            (basefile, ext) = os.path.splitext(filepath)
-            output = "%s.hdf5" % basefile
-
+    def __init__(self, filepath, output, progress=None):
         nf = ns.File(filepath)
         h5 = h5py.File(output, 'w')
 
@@ -313,26 +320,33 @@ class ConsoleIndicator(ProgressIndicator):
 
 
 def main():
-    global Converter,H5Converter
     output = None
     parser = argparse.ArgumentParser(description='Convert Neuroshare readable files to nix/hdf5 format')
     parser.add_argument("-o","--output",type=str,help="name of the output file")
     parser.add_argument("--hdf5",action="store_true",help="For plain conversion to hdf5 format")
     parser.add_argument("InputFile",type=str,help="File to be converted")
     args = parser.parse_args()
-    
-    if args.output:
-        output = args.output
-    if args.hdf5:
-        Converter = H5Converter
-    
+
     filename = args.InputFile
     ci = ConsoleIndicator()
-    converter = Converter(filename, output, progress=ci)
+    if args.output:
+        output = args.output
+    else:
+        (basefile, ext) = os.path.splitext(filename)
+
+    if args.hdf5:
+        if output is None:
+            output = "%s.hdf5" % basefile
+        converter = H5Converter(filename, output, progress=ci)
+    else:        
+        if output is None:
+            output = "%s.h5" % basefile
+        converter = Converter(filename, output, progress=ci)
+
     start = time.time()
     converter.convert()
     ci.cleanup()
-    print("converted in "+str(time.time()-start)+" seconds")
+    sys.stderr.write("Converted from %s to %s in %.2f seconds" % (filename,output,(time.time()-start)))
     return 0
 
 
